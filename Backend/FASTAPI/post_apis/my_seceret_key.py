@@ -1,0 +1,11 @@
+
+def secreat_data():
+    SECERET_KEY = "EHAIODFJOHERNFCIV HJNER9UDFSJKALERUI"
+    ALGORITHM = "HS256"
+    TOKEN_EXPIRY_MIN = 30
+    return{
+        SECERET_KEY,
+        ALGORITHM,
+        TOKEN_EXPIRY_MIN
+    }
+
