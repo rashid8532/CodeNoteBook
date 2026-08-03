@@ -1,4 +1,5 @@
 from fastapi import FastAPI,Depends,HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -6,14 +7,26 @@ from FASTAPI.post_apis.pydanticModels.Signup_model import UserCreate
 from DATABASE.database import get_db
 from DATABASE.Tables.users_table import User
 
+
 app = FastAPI()
+
+# Allowed origen (Front end url)
+origins =["http://localhost:5173"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins= origins, # Allowed frontend
+    allow_credentials= True,
+    allow_methods= ["*"], 
+    allow_headers= ["*"]
+)
 
 password_context = CryptContext(schemes=["bcrypt"])
 
-Oauth2_scheme = OAuth2PasswordBearer(tokenUrl="register")
+Oauth2_scheme = OAuth2PasswordBearer(tokenUrl="signup")
 
-@app.post("/register")
-def register(user:UserCreate,db:Session = Depends(get_db)):
+@app.post("/signup")
+def signup(user:UserCreate,db:Session = Depends(get_db)):
     email_exist = db.query(User).filter(User.email == user.email).first()
     name_exist = db.query(User).filter(User.username == user.username).first()
     if email_exist :

@@ -1,4 +1,5 @@
 from fastapi import FastAPI,HTTPException,Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import or_,and_
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
@@ -10,6 +11,17 @@ from FASTAPI.my_seceret_key import SECRET_KEY,ALGORITHM,TOKEN_EXPIRY_MIN
 from DATABASE.database import get_db
 
 app = FastAPI()
+
+
+origins = ["http://localhost:5173"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 password_context = CryptContext(schemes=["bcrypt"])
 
