@@ -5,10 +5,10 @@ import logo from './logo.png'
 import {Link} from 'react-router-dom'
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-//   { name: 'Company', href: '#' },
+//   { name: 'Product', href: '#' },
+//   { name: 'Features', href: '#' },
+//   { name: 'Marketplace', href: '#' },
+// //   { name: 'Company', href: '#' },
 ]
 
 export default function Homepage() {
