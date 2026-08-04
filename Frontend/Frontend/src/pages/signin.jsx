@@ -31,11 +31,13 @@ export default function Signin() {
       data
     );
 
+    localStorage.setItem("token",response.data.access_token)
+
     console.log(response.data);
 
     alert("Signin Successful");
 
-    navigate("/");
+    navigate("/editor");
   } catch (error) {
     console.log(error.response?.data);
     console.error(error);
@@ -66,7 +68,7 @@ export default function Signin() {
           <form onSubmit={handleSubmit} className="space-y-6">
             
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
+              <label htmlFor="username" className="block text-sm/6 font-medium text-gray-100">
                 Username
               </label>
               <div className="mt-2">

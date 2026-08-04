@@ -9,6 +9,8 @@ import Homepage from './pages/homepage/homepage.jsx'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Signup from './pages/signup.jsx'
 import Signin from './pages/signin.jsx'
+import Editor from './pages/editor.jsx'
+import ProtectedRoute from './components/protected_routes.jsx'
 
 const router = createBrowserRouter(
   [
@@ -22,7 +24,15 @@ const router = createBrowserRouter(
     },
     {path: "/signin",
       element : <Signin/>
-    }
+    },
+    {path: "/editor",
+      element : (
+        <ProtectedRoute>
+          <Editor/>
+        </ProtectedRoute>
+      )
+    },
+    
   ]
 )
 
