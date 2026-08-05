@@ -73,6 +73,9 @@ def get_current_user(token:str = Depends(Oauth2_schemes),db:Session =Depends(get
             )
         user = db.query(User).filter(User.username == username).first()
 
+        print("Database user:", user.username)
+        print("Database ID:", user.id)
+
         if user is None :
             raise HTTPException(
                 status_code=401,
