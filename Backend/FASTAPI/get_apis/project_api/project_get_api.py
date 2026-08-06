@@ -18,5 +18,5 @@ def get_project(
     projects = db.query(Project).filter(Project.user_id == current_user.id).all()
 
     if len(projects) == 0:
-        raise HTTPException(status_code=404,detail="no project on this user id")
+        raise HTTPException(status_code=404,detail="Here is no project on this user id")
     return(projects)

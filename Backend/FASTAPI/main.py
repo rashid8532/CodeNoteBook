@@ -6,6 +6,12 @@ from FASTAPI.post_apis.Projects_api.new_project import router as new_project_rou
 from FASTAPI.get_apis.project_api.project_get_api import router as get_project_router
 from FASTAPI.update_api.project_apis.project_update import router as project_updade_router
 from FASTAPI.delete_api.delete_project_api import router as project_delete_router
+from FASTAPI.post_apis.File_api.create_file import router as create_file_router
+from FASTAPI.get_apis.file_api.get_file_api import router as get_file_router
+from FASTAPI.update_api.file_api.update_file_name import router as update_file_router
+from FASTAPI.update_api.file_api.update_file_content import router as update_file_content_router
+from FASTAPI.delete_api.delete_file_api import router as delete_file_router
+
 
 app = FastAPI()
 
@@ -26,3 +32,8 @@ app.include_router(new_project_router)
 app.include_router(get_project_router)
 app.include_router(project_updade_router)
 app.include_router(project_delete_router)
+app.include_router(create_file_router)
+app.include_router(get_file_router)
+app.include_router(update_file_router)
+app.include_router(update_file_content_router)
+app.include_router(delete_file_router)

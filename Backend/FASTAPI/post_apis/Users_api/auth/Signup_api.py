@@ -17,6 +17,7 @@ password_context = CryptContext(schemes=["bcrypt"])
 
 Oauth2_scheme = OAuth2PasswordBearer(tokenUrl="signup")
 
+
 @router.post("/signup")
 def signup(user:UserCreate,db:Session = Depends(get_db)):
     email_exist = db.query(User).filter(User.email == user.email).first()

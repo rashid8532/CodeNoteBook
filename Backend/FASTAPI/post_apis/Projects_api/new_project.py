@@ -14,6 +14,7 @@ def new_Project(
     project:create_projects,
     current_user : User =Depends(get_current_user),
     db:Session = Depends(get_db)):
+    
     project_exist = db.query(Project).filter(Project.project_name == project.project_name).first()
     if project_exist:
         raise HTTPException(
