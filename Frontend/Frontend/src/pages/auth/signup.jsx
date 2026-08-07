@@ -33,7 +33,8 @@ const handleSubmit = async (e) => {
       formData
     );
 
-    console.log(response.data);
+    
+
 
     alert("Signup Successful");
 

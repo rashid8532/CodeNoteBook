@@ -1,6 +1,8 @@
 import { useState } from "react"
 import axios, { Axios } from "axios"
 import { useNavigate, useSearchParams } from "react-router-dom"
+
+
 export default function Signin() {
 
   const navigate = useNavigate()
@@ -30,15 +32,18 @@ export default function Signin() {
       "http://127.0.0.1:8000/signin",
       data
     );
-
+    console.log(response)
+    console.log(response.data)
     localStorage.setItem("token",response.data.access_token)
+    localStorage.setItem("user_id",response.data.user_id)
 
-    console.log(response.data);
+    console.log(response.data.user_id);
 
     alert("Signin Successful");
 
     navigate("/editor");
   } catch (error) {
+    alert("something is wrong check username or password")
     console.log(error.response?.data);
     console.error(error);
   }

@@ -33,7 +33,7 @@ def create_token(data:dict):
     to_encode.update({
         "exp" : expire
     })
-
+    
     token = jwt.encode(
         to_encode,
         SECRET_KEY,
@@ -52,6 +52,7 @@ def signin(form_data : OAuth2PasswordRequestForm = Depends(),db:Session = Depend
         )
     ACCESS_TOKEN = create_token({"sub":form_data.username})
     return{
+        "user_id" : user.id,
         "access_token" : ACCESS_TOKEN,
         "token_type" : "bearer"
     }
@@ -59,11 +60,13 @@ def signin(form_data : OAuth2PasswordRequestForm = Depends(),db:Session = Depend
 
 def get_current_user(token:str = Depends(Oauth2_schemes),db:Session =Depends(get_db)):
     try :
+        print("before payload",token,SECRET_KEY,ALGORITHM)
         payload = jwt.decode(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM]
             )
+        print("after payload",token,SECRET_KEY,ALGORITHM)
         username: str = payload.get("sub")
 
         if username is None :
@@ -73,12 +76,9 @@ def get_current_user(token:str = Depends(Oauth2_schemes),db:Session =Depends(get
             )
         user = db.query(User).filter(User.username == username).first()
 
-        print("Database user:", user.username)
-        print("Database ID:", user.id)
-
         if user is None :
             raise HTTPException(
-                status_code=401,
+                status_code=400,
                 detail="Invalid token"
             )
         return user
