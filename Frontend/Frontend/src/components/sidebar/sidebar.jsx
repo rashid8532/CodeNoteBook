@@ -1,8 +1,8 @@
 import { Description } from "@heroui/react";
 import axios from "axios";
 import { useState,useEffect} from "react";
-
-
+import { Create_new_file } from "../dropdowns/new_file";
+import { Delete_file } from "../dropdowns/delete_file";
 export default function Sidebar() {
 
   const [projects, setProjects] = useState([
@@ -11,11 +11,11 @@ export default function Sidebar() {
       project_name: "Frontend",
       Description : "",
       open: true,
-      files: [
-        { id: 1, file_name: "App.jsx" },
-      ],
+      files:[]
     },
   ]);
+
+    
     useEffect(()=>{
         const fetchprojects = async()=>{
             const token = localStorage.getItem("token")
@@ -27,8 +27,16 @@ export default function Sidebar() {
                     }
                 }
             )
-            setProjects((await response).data)
-            console.log(response.data)
+
+            const projectswithstates = response.data.map((project) =>({
+              ...project,
+              open:false,
+              files:[]
+            }))
+
+            setProjects(projectswithstates)
+            console.log(projectswithstates);
+            
         }
 
         fetchprojects()
@@ -40,15 +48,44 @@ export default function Sidebar() {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const toggleProject = (id) => {
-    setProjects((prev) =>
-      prev.map((project) =>
-        project.id === id
-          ? { ...project, open: !project.open }
-          : project
-      )
-    );
-  };
+  const toggleProject = async (id) => {
+    const project = projects.find(
+      (project) => project.id == id,
+    )
+
+    if (project.open){
+      setProjects((prev) =>
+      prev.map(project=>
+        project.id === id 
+        ?{...project, open:false}
+        : project
+      ))
+      return;
+    }
+    try{
+      const token = localStorage.getItem("token")
+      const response = await axios.get(
+        `http://127.0.0.1:8000/get_files?project_id=${id}`,
+        {
+          headers:{
+          Authorization:`Bearer ${token}`
+          }
+        }
+    )   
+    setProjects((prev)=>
+    prev.map((project)=>project.id ===id
+        ?{
+          ...project,
+          open:true,
+          files : response.data
+        }
+        :project
+      ))
+    }
+    catch(error){
+      console.log(error)
+    }
+}
 
   return (
     <aside className="w-72 h-screen bg-[#1e1e1e] border-r border-gray-800 text-gray-300 flex flex-col">
@@ -76,9 +113,10 @@ export default function Sidebar() {
           <div key={project.id}>
 
             {/* Project Header */}
-            <button
+            <div className="w-full flex">
+                 <button
               onClick={() => toggleProject(project.id)}
-              className="w-full flex items-center gap-2 px-4 py-2 hover:bg-[#2d2d2d] transition"
+              className=" w-full flex items-center gap-2 px-4 py-2 hover:bg-[#2d2d2d] transition"
             >
 
               <span className="text-xs">
@@ -91,17 +129,26 @@ export default function Sidebar() {
                 {project.project_name}
               </span>
 
+              
             </button>
+            <div className="flex justify-center items-center hover:bg-[#2d2d2d] transition h-15 w-20">
+              <Create_new_file projectId={project.id}/>
+            </div>
+ 
 
+            </div>
+            
             {/* Files */}
-            {/* {project.open && (
+            {project.open && (
 
               <div className="ml-8">
 
                 {project.files.map((file) => (
 
-                  <button
-                    key={file.id}
+                  <div className="flex"
+                  key={file.id}>
+                    <button
+                    
                     onClick={() => setSelectedFile(file.id)}
                     className={`w-full flex items-center gap-2 px-3 py-2 text-left rounded-md transition
 
@@ -114,15 +161,20 @@ export default function Sidebar() {
 
                     <span>📄</span>
 
-                    <span>{file.name}</span>
-
+                    <span>{file.file_name}</span>
                   </button>
 
+                  <div className="flex justify-center items-center hover:bg-[#2d2d2d] transition h-15 w-20">
+                    <Delete_file FileName={file.file_name}/>
+                    {console.log(file.file_name)}
+                  </div>
+                  </div>
+
                 ))}
-
               </div>
+              
 
-            )} */}
+            )}
 
           </div>
         ))}

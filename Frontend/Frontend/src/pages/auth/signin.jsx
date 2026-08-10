@@ -38,6 +38,7 @@ export default function Signin() {
     localStorage.setItem("user_id",response.data.user_id)
 
     console.log(response.data.user_id);
+    console.log(response.data.access_token,"this is in signin")
 
     alert("Signin Successful");
 

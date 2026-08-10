@@ -16,6 +16,7 @@ def delete_file(
     db : Session = Depends(get_db),
     current_user : User = Depends(get_current_user)
 ):
+    print("came to fillter")
     file = db.query(File).filter(
         and_(
             File.file_name == file_name,
@@ -24,6 +25,8 @@ def delete_file(
         )
     ).first()
     print(file)
+    print("came out from fillter")
+
 
     if file == None:
         raise HTTPException(
@@ -33,6 +36,7 @@ def delete_file(
     try:
         db.delete(file)
         db.commit()
+        # db.refresh(File)
         return("file successfully deleted")
     except Exception:
         db.rollback()

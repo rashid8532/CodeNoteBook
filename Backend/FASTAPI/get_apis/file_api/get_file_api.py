@@ -13,24 +13,33 @@ router = APIRouter()
 
 @router.get("/get_files",response_model=list[FileResponse])
 def get_files(
+    project_id : str,
     current_user : User = Depends(get_current_user), 
     db:Session = Depends(get_db),
 ):
-    UserFiles = db.query(File).filter(
-        and_(
-            current_user.id == Project.user_id,
-            Project.id == File.project_id
+    project = db.query(Project).filter(
+    Project.id == project_id,
+    Project.user_id == current_user.id
+    ).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found."
         )
+
+    files = db.query(File).filter(
+        File.project_id == project.id
     ).all()
 
-    try:
-        return(UserFiles)
-    except Exception:
-        if len(UserFiles) == 0:
-            raise HTTPException(
-                status_code=404,
-                detail="No file exist"
-            )
+    if not files :
+         raise HTTPException(
+              status_code=404,
+              detail= "no file found in this folder"
+         )
+
+    return files
+
 
 @router.get("/get_files_byname")
 def get_file_byname(
