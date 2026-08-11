@@ -16,7 +16,10 @@ from FASTAPI.delete_api.delete_file_api import router as delete_file_router
 app = FastAPI()
 
 # Allowed origen (Front end url)
-origins =["http://localhost:5173"]
+origins =[
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+          ]
 
 app.add_middleware(
     CORSMiddleware,

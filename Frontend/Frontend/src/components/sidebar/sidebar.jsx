@@ -1,193 +1,86 @@
-import { Description } from "@heroui/react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useState,useEffect} from "react";
-import { Create_new_file } from "../dropdowns/new_file";
-import { Delete_file } from "../dropdowns/delete_file";
+import ProjectItem from "./projectItems"
+import { Create_new_project } from "../dropdowns/new_project";
+import fileContext from "../../context/FileContext";
+
 export default function Sidebar() {
 
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      project_name: "Frontend",
-      Description : "",
-      open: true,
-      files:[]
-    },
-  ]);
+    // All projects
+    const [projects, setProjects] = useState([]);
 
-    
-    useEffect(()=>{
-        const fetchprojects = async()=>{
-            const token = localStorage.getItem("token")
-            const response = await axios.get(
-                "http://127.0.0.1:8000/get_projects",
-                {
-                    headers:{
-                        Authorization:`Bearer ${token}`
+    const{selectedFile,setSelectedFile} = useContext(fileContext)
+
+    // Get projects from backend
+    useEffect(() => {
+
+        const fetchProjects = async () => {
+
+            try {
+                const token = localStorage.getItem("token");
+
+                const response = await axios.get(
+                    "http://127.0.0.1:8000/get_projects",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
-                }
-            )
+                );
 
-            const projectswithstates = response.data.map((project) =>({
-              ...project,
-              open:false,
-              files:[]
-            }))
+                setProjects(response.data);
 
-            setProjects(projectswithstates)
-            console.log(projectswithstates);
-            
-        }
+                console.log("Projects:", response.data);
 
-        fetchprojects()
-        
-    },[])
-    
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchProjects();
+
+    }, []);
 
 
+    return (
+        <aside className="flex flex-col h-full bg-black text-white w-70">
 
-  const [selectedFile, setSelectedFile] = useState(null);
+            {/* Header */}
+            <div className="flex justify-between items-center px-4 py-3 border-b border-gray-800">
 
-  const toggleProject = async (id) => {
-    const project = projects.find(
-      (project) => project.id == id,
-    )
+                <h2 className="font-semibold uppercase tracking-wider text-sm">
+                    Explorer
+                </h2>
 
-    if (project.open){
-      setProjects((prev) =>
-      prev.map(project=>
-        project.id === id 
-        ?{...project, open:false}
-        : project
-      ))
-      return;
-    }
-    try{
-      const token = localStorage.getItem("token")
-      const response = await axios.get(
-        `http://127.0.0.1:8000/get_files?project_id=${id}`,
-        {
-          headers:{
-          Authorization:`Bearer ${token}`
-          }
-        }
-    )   
-    setProjects((prev)=>
-    prev.map((project)=>project.id ===id
-        ?{
-          ...project,
-          open:true,
-          files : response.data
-        }
-        :project
-      ))
-    }
-    catch(error){
-      console.log(error)
-    }
-}
-
-  return (
-    <aside className="w-72 h-screen bg-[#1e1e1e] border-r border-gray-800 text-gray-300 flex flex-col">
-
-      {/* Header */}
-      <div className="flex justify-between items-center px-4 py-3 border-b border-gray-800">
-
-        <h2 className="font-semibold uppercase tracking-wider text-sm">
-          Explorer
-        </h2>
-
-        <button
-          className="w-8 h-8 rounded hover:bg-gray-700 text-xl"
-          title="New Project"
-        >
-          +
-        </button>
-
-      </div>
-
-      {/* Projects */}
-      <div className="flex-1 overflow-y-auto">
-
-        {projects.map((project) => (
-          <div key={project.id}>
-
-            {/* Project Header */}
-            <div className="w-full flex">
-                 <button
-              onClick={() => toggleProject(project.id)}
-              className=" w-full flex items-center gap-2 px-4 py-2 hover:bg-[#2d2d2d] transition"
-            >
-
-              <span className="text-xs">
-                {project.open ? "▼" : "▶"}
-              </span>
-
-              <span>📁</span>
-
-              <span className="font-medium">
-                {project.project_name}
-              </span>
-
-              
-            </button>
-            <div className="flex justify-center items-center hover:bg-[#2d2d2d] transition h-15 w-20">
-              <Create_new_file projectId={project.id}/>
-            </div>
- 
+                 <Create_new_project/>
 
             </div>
-            
-            {/* Files */}
-            {project.open && (
 
-              <div className="ml-8">
 
-                {project.files.map((file) => (
+            {/* Projects */}
+            <div className="flex-1 overflow-y-auto">
 
-                  <div className="flex"
-                  key={file.id}>
-                    <button
-                    
-                    onClick={() => setSelectedFile(file.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-left rounded-md transition
+                {projects.map((project) => (
 
-                    ${
-                      selectedFile === file.id
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-[#2d2d2d]"
-                    }`}
-                  >
-
-                    <span>📄</span>
-
-                    <span>{file.file_name}</span>
-                  </button>
-
-                  <div className="flex justify-center items-center hover:bg-[#2d2d2d] transition h-15 w-20">
-                    <Delete_file FileName={file.file_name}/>
-                    {console.log(file.file_name)}
-                  </div>
-                  </div>
+                    <ProjectItem
+                        key={project.id}
+                        project={project}
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
+                    />
 
                 ))}
-              </div>
-              
 
-            )}
+            </div>
 
-          </div>
-        ))}
 
-      </div>
+            {/* Footer */}
+            <div className="border-t border-gray-800 p-3 text-xs text-gray-500">
 
-      {/* Footer */}
-      <div className="border-t border-gray-800 p-3 text-xs text-gray-500">
+                Projects: {projects.length}
 
-        Projects: {projects.length}
+            </div>
 
-      </div>
-
-    </aside>
-  );
+        </aside>
+    );
 }

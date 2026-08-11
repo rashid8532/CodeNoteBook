@@ -1,33 +1,33 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import {Create_new_project} from "../../components/dropdowns/new_project";
 import Sidebar from "../../components/sidebar/sidebar";
+import EditorArea from "../../components/editor/editorArea";
+import fileContext from "../../context/FileContext";
+
 
 export default function Editor(){
+    const [FileName,setFileName] = useState("")
+
+    // Currently selected file
+    const [selectedFile, setSelectedFile] = useState(null);
     useEffect(() =>{
         const fetchdata = async () =>{
             const token = localStorage.getItem("token")
-
-            console.log("the token is saved")
-
 
             const response = await axios.get(
                 console.log("Enter in axios block"),
 
                 "http://127.0.0.1:8000/protected",
-                console.log("called the api"),
                 {
                     headers:{
                         Authorization:`Bearer ${token}`
                     }
                 },
-                console.log("come out from the headers")
             )
-            console.log("come out from the fetchdata function")
-
-        }
+            }
 
         fetchdata()
     },[])
@@ -53,17 +53,29 @@ export default function Editor(){
             }
                 }/>
 
-            <div className="flex h-screen">
+
+    <fileContext.Provider
+    value={
+        {
+        FileName,
+        setFileName,
+        selectedFile,
+        setSelectedFile
+        }
+        }>
+        <div className="flex h-screen">
 
       <Sidebar />
 
       <main className="flex-1 bg-[#252526]">
-
-        {/* Monaco Editor */}
+            <EditorArea FileName={FileName}/>
 
       </main>
 
     </div>
+    </fileContext.Provider>
+
+    
         </>
     )
 }

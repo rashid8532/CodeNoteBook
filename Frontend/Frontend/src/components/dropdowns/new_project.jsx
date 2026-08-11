@@ -47,7 +47,7 @@ export function Create_new_project() {
   return (
     <Modal>
         <div className='flex items-center justify-center h-20 w-32'>
-            <Button className={"bg-taupe-900 rounded-xl h-10 text-blue-400 font-medium"}>new Projects</Button>
+            <Button className={"bg-taupe-900 rounded-xl h-10 text-white font-medium"}>Add New Projects</Button>
         </div>
 
       <Modal.Backdrop>
@@ -104,7 +104,7 @@ export function Create_new_project() {
             </div>
 
             <Button className="w-full" slot="close" type="submit">
-                Continue
+                Create
               </Button>
           </form>
             </Modal.Body>

@@ -6,16 +6,14 @@ import { useNavigate,useSearchParams} from "react-router-dom";
 export function Delete_file({FileName}) {
 
   const token = localStorage.getItem("token")
-    console.log("rendering this ", FileName )
+    // console.log("rendering this ", FileName )
     const handleSubmit = async (e) =>{
       e.preventDefault();
-      console.log(FileName)
-      console.log("runing handleSubmit",FileName)
+      // console.log(FileName)
+      // console.log("runing handleSubmit",FileName)
 
       try{
         const token = localStorage.getItem("token")
-        console.log("enter at the try block to delete")
-        console.log(token,"this is in delete file")
         const response = await axios.delete(
           "http://127.0.0.1:8000/delete_file",
           
@@ -56,12 +54,12 @@ export function Delete_file({FileName}) {
             
             <div>
               <label htmlFor="project_name" className="block text-sm/6 font-medium text-gray-100">
-                File Name 
+                File Name:  <span className="text-red-600">{FileName}</span><br /> Do you want to delete it
               </label>
               
             </div>
 
-            <Button className="w-full" slot="close" type="submit">
+            <Button className="w-full bg-red-700" slot="close" type="submit">
                 Delete
               </Button>
           </form>

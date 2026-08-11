@@ -42,11 +42,6 @@ export default function Navbar({onNewproject}) {
               <h1>CodeNoteBook</h1>
             </div>
             <div className="hidden sm:ml-6 sm:block w-250">
-              <div className="flex justify-around ">
-                <Create_new_project/>
-                
-                
-              </div>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
