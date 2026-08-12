@@ -11,6 +11,7 @@ from FASTAPI.get_apis.file_api.get_file_api import router as get_file_router
 from FASTAPI.update_api.file_api.update_file_name import router as update_file_router
 from FASTAPI.update_api.file_api.update_file_content import router as update_file_content_router
 from FASTAPI.delete_api.delete_file_api import router as delete_file_router
+from FASTAPI.get_apis.user_api.get_user import router as user_data_router
 
 
 app = FastAPI()
@@ -40,3 +41,4 @@ app.include_router(get_file_router)
 app.include_router(update_file_router)
 app.include_router(update_file_content_router)
 app.include_router(delete_file_router)
+app.include_router(user_data_router)

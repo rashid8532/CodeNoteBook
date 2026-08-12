@@ -78,7 +78,6 @@ export default function ProjectItem({
                     <span className="font-medium">
                         {project.project_name}
                     </span>
-
                 </button>
 
 
@@ -104,6 +103,7 @@ export default function ProjectItem({
                         <FileItem
                             key={file.id}
                             file={file}
+                            project_name={project.project_name}
                             projectId={project.id}
                             selectedFile={selectedFile}
                             setSelectedFile={setSelectedFile}

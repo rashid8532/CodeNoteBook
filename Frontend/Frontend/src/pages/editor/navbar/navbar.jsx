@@ -10,14 +10,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Navbar({onNewproject}) { 
+export default function Navbar({onNewproject , logout}) { 
 
 
 
   return (
     <Disclosure
       as="nav"
-      className="relative bg-black after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
+      className="relative bg-black after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 border-2 border-blue-400"
     >
       <div className="max-w-7xl h-20">
         <div className="relative flex h-20 w-screen px-10 items-center justify-between">
@@ -81,6 +81,7 @@ export default function Navbar({onNewproject}) {
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
+                    onClick={logout}
                   >
                     Sign out
                   </a>

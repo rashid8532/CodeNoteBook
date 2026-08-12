@@ -7,8 +7,7 @@ import fileContext from "../../context/FileContext";
 export default function Sidebar() {
 
     // All projects
-    const [projects, setProjects] = useState([]);
-
+    const {projects,setProjects} = useContext(fileContext)
     const{selectedFile,setSelectedFile} = useContext(fileContext)
 
     // Get projects from backend

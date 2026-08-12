@@ -117,8 +117,7 @@ export default function Homepage() {
               Build, Run and Save Code in One Powerful <span className='text-blue-300'>Note</span><span className='text-blue-500'>Book</span>
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat.
+              Write, run, and manage your code in one place. Create projects, organize your files, choose your programming language, and execute your code instantly. Start building something great today.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               

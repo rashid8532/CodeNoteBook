@@ -2,6 +2,7 @@ import { Delete_file } from "../dropdowns/delete_file";
 
 export default function FileItem({
     file,
+    project_name,
     projectId,
     selectedFile,
     setSelectedFile,

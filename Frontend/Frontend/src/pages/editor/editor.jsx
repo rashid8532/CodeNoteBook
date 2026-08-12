@@ -1,18 +1,29 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import {Create_new_project} from "../../components/dropdowns/new_project";
 import Sidebar from "../../components/sidebar/sidebar";
 import EditorArea from "../../components/editor/editorArea";
 import fileContext from "../../context/FileContext";
+import Output from "../../components/console/outputArea";
 
 
 export default function Editor(){
+    // this const variables are for fileContexts 
     const [FileName,setFileName] = useState("")
-
-    // Currently selected file
     const [selectedFile, setSelectedFile] = useState(null);
+    const [projects, setProjects] = useState([]);
+
+    // this state is use prop drilling now
+    const editorRef = useRef(null);
+    const [selectedLanguage,setSelectedLanguage] = useState("javascript")
+
+
+
+
+
+
     useEffect(() =>{
         const fetchdata = async () =>{
             const token = localStorage.getItem("token")
@@ -51,7 +62,9 @@ export default function Editor(){
                 console.log(' i got clicked')
                return setopen(true)
             }
-                }/>
+                }
+                
+            logout ={logout}/>
 
 
     <fileContext.Provider
@@ -60,7 +73,9 @@ export default function Editor(){
         FileName,
         setFileName,
         selectedFile,
-        setSelectedFile
+        setSelectedFile,
+        projects,
+        setProjects
         }
         }>
         <div className="flex h-screen">
@@ -68,7 +83,8 @@ export default function Editor(){
       <Sidebar />
 
       <main className="flex-1 bg-[#252526]">
-            <EditorArea FileName={FileName}/>
+            <EditorArea FileName={FileName} editorRef={editorRef} selectedLanguage={selectedLanguage} setSelectedLanguage={setSelectedLanguage}/>
+            <Output editorRef={editorRef}selectedLanguage={selectedLanguage}/>
 
       </main>
 
