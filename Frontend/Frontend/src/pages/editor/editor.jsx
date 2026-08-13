@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useEffect, useState,useRef } from "react";
+import { createContext, useEffect, useState,useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import {Create_new_project} from "../../components/dropdowns/new_project";
@@ -11,10 +11,16 @@ import Output from "../../components/console/outputArea";
 
 export default function Editor(){
     // this const variables are for fileContexts 
-    const [FileName,setFileName] = useState("")
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [projects, setProjects] = useState([]);
+    const {
+        FileName,
+        setFileName,
+        selectedFile,
+        setSelectedFile,
+        projects,
+        setProjects
+    } = useContext(fileContext);
 
+    
     // this state is use prop drilling now
     const editorRef = useRef(null);
     const [selectedLanguage,setSelectedLanguage] = useState("javascript")
@@ -67,17 +73,7 @@ export default function Editor(){
             logout ={logout}/>
 
 
-    <fileContext.Provider
-    value={
-        {
-        FileName,
-        setFileName,
-        selectedFile,
-        setSelectedFile,
-        projects,
-        setProjects
-        }
-        }>
+    
         <div className="flex h-screen">
 
       <Sidebar />
@@ -89,7 +85,6 @@ export default function Editor(){
       </main>
 
     </div>
-    </fileContext.Provider>
 
     
         </>

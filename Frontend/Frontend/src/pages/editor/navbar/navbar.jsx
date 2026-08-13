@@ -2,8 +2,14 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import logo from './logo.png'
+import user_logo from './user_logo.png'
 import {Link } from 'react-router-dom'
 import { Create_new_project } from '../../../components/dropdowns/new_project'
+import { Navigate ,useNavigate} from 'react-router-dom'
+import { Delete_project } from '../../../components/dropdowns/delete_project'
+import { useContext, useEffect } from 'react'
+import fileContext from '../../../context/FileContext'
+import getUserData from '../../user/userapi'
 
 
 function classNames(...classes) {
@@ -12,7 +18,14 @@ function classNames(...classes) {
 
 export default function Navbar({onNewproject , logout}) { 
 
-
+  const {user,setuser} = useContext(fileContext)
+  const navigate = useNavigate()
+  const touser = ()=>{
+    navigate("/user")
+  }
+  useEffect(()=>{
+    getUserData(setuser)
+  })
 
   return (
     <Disclosure
@@ -41,19 +54,21 @@ export default function Navbar({onNewproject , logout}) {
             <div className=' text-amber-50 w-35 text-xl font-medium items-center flex justify-center'>
               <h1>CodeNoteBook</h1>
             </div>
-            <div className="hidden sm:ml-6 sm:block w-250">
+            <div className="sm:ml-6 sm:block w-250 bg-red-50 flex">
+              <span>Hay <span>{user.FirstName}</span> </span>
+              <Link to={"/"}>Homepage</Link>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
-              <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+              <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 mx-7">
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">Open user menu</span>
                 <img
                   className='h-10 w-auto'
                   alt=""
-                  src={logo}
+                  src={user_logo}
                 />
               </MenuButton>
 
@@ -63,8 +78,9 @@ export default function Navbar({onNewproject , logout}) {
               >
                 <MenuItem>
                   <a
-                    href="#"
+
                     className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
+                    onClick={touser}
                   >
                     my profile
                   </a>

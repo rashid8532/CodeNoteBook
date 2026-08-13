@@ -3,6 +3,7 @@ import axios from "axios";
 import ProjectItem from "./projectItems"
 import { Create_new_project } from "../dropdowns/new_project";
 import fileContext from "../../context/FileContext";
+import { Delete_project } from "../dropdowns/delete_project";
 
 export default function Sidebar() {
 
@@ -71,6 +72,8 @@ export default function Sidebar() {
                 ))}
 
             </div>
+
+            <Delete_project/>
 
 
             {/* Footer */}
