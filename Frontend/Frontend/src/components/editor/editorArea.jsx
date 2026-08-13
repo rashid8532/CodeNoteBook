@@ -1,99 +1,98 @@
-import { useEffect, useRef, useState } from 'react'
-import Editor from '@monaco-editor/react'
-import axios from 'axios'
-import EditorBar from './editorbar'
-// import getFileContent from './loadFileContent';
+import { useEffect, useState } from "react";
+import Editor from "@monaco-editor/react";
+import axios from "axios";
+import EditorBar from "./editorbar";
 
 function EditorArea({
-    FileName,
-    editorRef,
-    selectedLanguage,
-    setSelectedLanguage 
+  FileName,
+  editorRef,
+  selectedLanguage,
+  setSelectedLanguage,
 }) {
-    const [content,setcontent] = useState("") 
-    // this selectedLnaguage is using prop drilling 
+  const [content, setcontent] = useState("");
 
-    const getFileContent = async (FileName) => {
-    const token = localStorage.getItem("token")
+  const getFileContent = async (FileName) => {
+    const token = localStorage.getItem("token");
 
     const response = await axios.get(
-        "http://127.0.0.1:8000/get_files_byname",
-        {
-            params: {
-                file_name: FileName
-            },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
+      "http://127.0.0.1:8000/get_files_byname",
+      {
+        params: {
+          file_name: FileName,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     return response.data;
-}
+  };
 
-
-    useEffect(() => {
+  useEffect(() => {
     const loadContent = async () => {
-        if (FileName) {
-            const data = await getFileContent(FileName);
-            setcontent(data.file_content);
-        }
+      if (!FileName) return;
+
+      const data = await getFileContent(FileName);
+      setcontent(data.file_content);
     };
 
     loadContent();
-}, [FileName]);    
-    
-    
-    
+  }, [FileName]);
 
-    function handleEditorDimount(editor,monaco){
-        editorRef.current = editor
-    }
+  const handleEditorMount = (editor) => {
+    editorRef.current = editor;
+  };
 
+  const saveFileContent = async () => {
+    const filecontent = editorRef.current.getValue();
+    const token = localStorage.getItem("token");
 
-    const saveFileContent = async()=>{
+    const response = await axios.put(
+      "http://127.0.0.1:8000/update_file_content",
+      null,
+      {
+        params: {
+          file_name: FileName,
+          file_updated_content: filecontent,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-        const filecontent = editorRef.current.getValue()
-        console.log(filecontent,"filecontent")
-        console.log(FileName,"filename")
-        const token = localStorage.getItem("token")
+    alert("Data is saved now");
 
-
-        const response = await axios.put(
-            "http://127.0.0.1:8000/update_file_content",
-            null,
-            {
-                params:{
-                    file_name:FileName,
-                    file_updated_content : filecontent
-                },
-                headers:{
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
-        alert("data is saved now")
-        return response.data;
-    }
-
-    function showValue(){
-        alert(editorRef.current.getValue())
-    }
-
+    return response.data;
+  };
 
   return (
-    <>
-    <EditorBar savefile={saveFileContent}FileName={FileName}selectedLanguage={selectedLanguage}setSelectedLanguage={setSelectedLanguage}/>
-    <Editor
-    theme='hc-black'
-    height="50vh"
-    language={selectedLanguage}
-    value= {content}
-    onMount={handleEditorDimount}
-    />
-    </>
-    
-  )
+    <div className="overflow-hidden border border-gray-800 bg-[#05070b]">
+      <EditorBar
+        savefile={saveFileContent}
+        FileName={FileName}
+        selectedLanguage={selectedLanguage}
+        setSelectedLanguage={setSelectedLanguage}
+      />
+
+      <div className="overflow-hidden">
+        <Editor
+          theme="hc-black"
+          height="50vh"
+          language={selectedLanguage}
+          value={content}
+          onMount={handleEditorMount}
+          options={{
+            minimap: { enabled: true },
+            fontSize: 14,
+            padding: { top: 12 },
+            scrollBeyondLastLine: false,
+          }}
+        />
+      </div>
+    </div>
+  );
 }
 
-export default EditorArea
+export default EditorArea;

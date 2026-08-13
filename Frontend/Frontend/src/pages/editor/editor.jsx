@@ -35,7 +35,6 @@ export default function Editor(){
             const token = localStorage.getItem("token")
 
             const response = await axios.get(
-                console.log("Enter in axios block"),
 
                 "http://127.0.0.1:8000/protected",
                 {
@@ -65,7 +64,6 @@ export default function Editor(){
         <>
             <Navbar
             onNewproject={()=>{
-                console.log(' i got clicked')
                return setopen(true)
             }
                 }

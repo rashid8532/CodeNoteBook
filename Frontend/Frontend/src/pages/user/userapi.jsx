@@ -13,7 +13,6 @@ const getUserData = async (setuser) => {
                 }
             )
 
-            console.log(response.data)
 
             setuser({
                 UserName: response.data.UserName,

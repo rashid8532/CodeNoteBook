@@ -1,141 +1,216 @@
-import { useState } from "react"
-import axios, { Axios } from "axios"
-import { useNavigate, useSearchParams } from "react-router-dom"
-
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import logo from "./logo.png";
 
 export default function Signin() {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
 
-  const [formData,setFormData] = useState({
-    username : "",
-    password : ""
-  })
+  const data = new URLSearchParams();
 
-  const data = new URLSearchParams()
+  data.append("username", formData.username);
+  data.append("password", formData.password);
 
-  data.append("username",formData.username)
-  data.append("password",formData.password)
-
-  const handleChange = (e) =>{
+  const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]:e.target.value,
-    }))
-  } 
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await axios.post(
-      "http://127.0.0.1:8000/signin",
-      data
-    );
-    console.log(response)
-    console.log(response.data)
-    localStorage.setItem("token",response.data.access_token)
-    localStorage.setItem("user_id",response.data.user_id)
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/signin",
+        data
+      );
 
-    console.log(response.data.user_id);
-    console.log(response.data.access_token,"this is in signin")
 
-    alert("Signin Successful");
+      localStorage.setItem("token", response.data.access_token);
+      localStorage.setItem("user_id", response.data.user_id);
 
-    navigate("/editor");
-  } catch (error) {
-    alert("something is wrong check username or password")
-    console.log(error.response?.data);
-    console.error(error);
-  }
-};
+
+      alert("Signin Successful");
+
+      navigate("/editor");
+    } catch (error) {
+      alert("something is wrong check username or password");
+
+    }
+  };
+
   return (
-    <>
-      {/*
-        This example requires updating your template:
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#05070b] px-6 py-12">
 
-        ```
-        <html class="h-full bg-gray-900">
-        <body class="h-full">
-        ```
-      */}
-      <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-black">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+      {/* Background glow */}
+      <div className="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
+
+      {/* Sign in card */}
+      <div
+        className="
+          relative
+          w-full
+          max-w-md
+          rounded-3xl
+          border
+          border-gray-800
+          bg-[#0d1117]
+          p-8
+          shadow-2xl
+          shadow-black/40
+          sm:p-10
+        "
+      >
+
+        {/* Logo */}
+        <div className="mb-8 flex justify-center">
           <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-            className="mx-auto h-10 w-auto"
+            src={logo}
+            alt="CodeNoteBook"
+            className="h-16 w-auto object-contain"
           />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in
-          to your account</h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label htmlFor="username" className="block text-sm/6 font-medium text-gray-100">
-                Username
-              </label>
-              <div className="mt-2">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                  autoComplete="username"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+        {/* Heading */}
+        <div className="mb-8 text-center">
+          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue-400">
+            Welcome back
+          </p>
 
-            
+          <h1 className="text-3xl font-bold tracking-tight text-white">
+            Sign in
+          </h1>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-100">
-                  Password
-                </label>
-                {/* <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
-                    Forgot password?
-                  </a>
-                </div> */}
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                Sign in
-              </button>
-            </div>
-          </form>
-
-          {/* <p className="mt-10 text-center text-sm/6 text-gray-400">
-            Not a member?{' '}
-            <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
-              Start a 14 day free trial
-            </a>
-          </p> */}
+          <p className="mt-2 text-sm text-gray-500">
+            Sign in to continue to your coding workspace.
+          </p>
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Username */}
+          <div>
+            <label
+              htmlFor="username"
+              className="mb-2 block text-sm font-medium text-gray-400"
+            >
+              Username
+            </label>
+
+            <input
+              id="username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              autoComplete="username"
+              placeholder="Enter your username"
+              className="
+                w-full
+                rounded-xl
+                border
+                border-gray-800
+                bg-[#11161d]
+                px-4
+                py-3
+                text-sm
+                text-white
+                outline-none
+                placeholder:text-gray-600
+                transition
+                duration-300
+                focus:border-blue-500/60
+                focus:ring-1
+                focus:ring-blue-500/20
+              "
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-gray-400"
+            >
+              Password
+            </label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              className="
+                w-full
+                rounded-xl
+                border
+                border-gray-800
+                bg-[#11161d]
+                px-4
+                py-3
+                text-sm
+                text-white
+                outline-none
+                placeholder:text-gray-600
+                transition
+                duration-300
+                focus:border-blue-500/60
+                focus:ring-1
+                focus:ring-blue-500/20
+              "
+            />
+          </div>
+
+          {/* Sign in */}
+          <button
+            type="submit"
+            className="
+              w-full
+              rounded-xl
+              bg-linear-to-r
+              from-blue-600
+              to-cyan-500
+              px-4
+              py-3
+              text-sm
+              font-semibold
+              text-white
+              shadow-lg
+              shadow-blue-500/20
+              transition
+              duration-300
+              hover:from-blue-500
+              hover:to-cyan-400
+              hover:shadow-blue-500/30
+              active:scale-[0.99]
+            "
+          >
+            Sign in
+          </button>
+
+        </form>
+
+        {/* Footer */}
+        <div className="mt-8 border-t border-gray-800 pt-6 text-center">
+          <p className="text-xs text-gray-600">
+            CodeNoteBook · Your coding workspace
+          </p>
+        </div>
+
       </div>
-    </>
-  )
+    </div>
+  );
 }

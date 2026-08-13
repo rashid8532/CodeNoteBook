@@ -1,72 +1,79 @@
-import {Button, Modal} from "@heroui/react";
-import { useState } from "react";
+import { Button, Modal } from "@heroui/react";
 import axios from "axios";
-import { useNavigate,useSearchParams} from "react-router-dom";
 
-export function Delete_file({FileName}) {
+export function Delete_file({ FileName }) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const token = localStorage.getItem("token")
-    // console.log("rendering this ", FileName )
-    const handleSubmit = async (e) =>{
-      e.preventDefault();
-      // console.log(FileName)
-      // console.log("runing handleSubmit",FileName)
+    try {
+      const token = localStorage.getItem("token");
 
-      try{
-        const token = localStorage.getItem("token")
-        const response = await axios.delete(
-          "http://127.0.0.1:8000/delete_file",
-          
-          {
-            params :{
-                file_name:FileName
-            },
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
+      await axios.delete(
+        "http://127.0.0.1:8000/delete_file",
+        {
+          params: {
+            file_name: FileName,
           },
-        )
-        console.log("came out from the try block")
-        alert(`file  Deleted Successfuly`)
-      }
-      catch (error){
-        alert("something went wrong this cant be delete")
-        console.error(error)
-      }
-    }
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  
+      alert("File deleted successfully");
+    } catch (error) {
+      alert("Something went wrong. This file can't be deleted.");
+      console.error(error);
+    }
+  };
+
   return (
     <Modal>
-        <div className='flex items-center justify-center '>
-            <Button className={"bg-taupe-900 rounded-xl h-10 text-blue-400 font-bold"}>-</Button>
-        </div>
+      {/* Delete button */}
+      <Button
+        className="h-7 min-w-7 rounded-lg bg-transparent px-2 text-gray-600 transition hover:bg-red-500/10 hover:text-red-400"
+      >
+        ×
+      </Button>
 
       <Modal.Backdrop>
         <Modal.Container>
-            <Modal.Dialog className="sm:max-w-90 bg-black">
-            <Modal.CloseTrigger />
-            <Modal.Header>
-              <Modal.Heading className="text-amber-50">Delete File</Modal.Heading>
-            </Modal.Header>
-            <Modal.Body>
-               <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label htmlFor="project_name" className="block text-sm/6 font-medium text-gray-100">
-                File Name:  <span className="text-red-600">{FileName}</span><br /> Do you want to delete it
-              </label>
-              
-            </div>
+          <Modal.Dialog className="w-full max-w-sm rounded-2xl border border-gray-800 bg-[#0d1117] text-white shadow-2xl">
 
-            <Button className="w-full bg-red-700" slot="close" type="submit">
-                Delete
-              </Button>
-          </form>
+            <Modal.CloseTrigger />
+
+            <Modal.Header>
+              <Modal.Heading className="text-lg font-semibold text-white">
+                Delete File
+              </Modal.Heading>
+            </Modal.Header>
+
+            <Modal.Body>
+              <form onSubmit={handleSubmit} className="space-y-5">
+
+                <p className="text-sm text-gray-400">
+                  Are you sure you want to delete
+                  <span className="mx-1 font-medium text-blue-400">
+                    {FileName}
+                  </span>
+                  ?
+                </p>
+
+                <p className="text-xs text-gray-600">
+                  This action cannot be undone.
+                </p>
+
+                <Button
+                  className="w-full rounded-xl bg-red-600 py-2 text-sm font-medium text-white transition hover:bg-red-500"
+                  slot="close"
+                  type="submit"
+                >
+                  Delete File
+                </Button>
+
+              </form>
             </Modal.Body>
-            <Modal.Footer>
-              
-            </Modal.Footer>
+
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>

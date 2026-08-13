@@ -1,93 +1,162 @@
-import {Button, Modal} from "@heroui/react";
+import { Button, Modal } from "@heroui/react";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate,useSearchParams} from "react-router-dom";
 
-export function Create_new_file({projectId}) {
+export function Create_new_file({ projectId }) {
+  const [formData, setFormData] = useState({
+    file_name: "",
+    project_id: projectId,
+  });
 
-  const token = localStorage.getItem("token")
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-    const [formData,setFormData] = useState(
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/create_file",
+        formData,
         {
-            file_name : "",
-            project_id : projectId
-        }
-    )
-
-    const handleChange = (e) =>{
-        setFormData((prve) =>({
-            ...prve,
-            [e.target.name] : e.target.value
-        }))
-    }
-
-    const handleSubmit = async (e) =>{
-      e.preventDefault();
-
-      try{
-        const token = localStorage.getItem("token")
-        console.log(formData)
-        const response = await axios.post(
-          "http://127.0.0.1:8000/create_file",
-          formData,
-          {
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        )
-        console.log(response.formData)
-        alert(`file ${formData.file_name} Created Successfuly`)
-      }
-      catch (error){
-        alert("something went wrong this cant be save")
-        console.error(error)
-      }
-    }
+        }
+      );
 
-  
+      alert(`file ${formData.file_name} Created Successfuly`);
+    } catch (error) {
+      alert("something went wrong this cant be save");
+      console.error(error);
+    }
+  };
+
   return (
     <Modal>
-        <div className='flex items-center justify-center '>
-            <Button className={"bg-taupe-900 rounded-xl h-10 text-blue-400 font-medium"}>+</Button>
-        </div>
+      {/* Trigger */}
+      <Button
+        className="
+          h-8
+          w-8
+          rounded-lg
+          border
+          border-gray-800
+          bg-[#11161d]
+          p-0
+          text-lg
+          font-medium
+          text-gray-400
+          transition
+          duration-300
+          hover:border-blue-500/40
+          hover:bg-[#151b23]
+          hover:text-blue-400
+        "
+      >
+        +
+      </Button>
 
-      <Modal.Backdrop>
+      <Modal.Backdrop className="bg-black/70 backdrop-blur-sm">
         <Modal.Container>
-            <Modal.Dialog className="sm:max-w-90 bg-black">
+          <Modal.Dialog
+            className="
+              w-full
+              max-w-md
+              rounded-3xl
+              border
+              border-gray-800
+              bg-[#0d1117]
+              text-white
+              shadow-2xl
+              shadow-black/50
+            "
+          >
             <Modal.CloseTrigger />
-            <Modal.Header>
-              <Modal.Heading className="text-amber-50">Create New File</Modal.Heading>
-            </Modal.Header>
-            <Modal.Body>
-               <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label htmlFor="project_name" className="block text-sm/6 font-medium text-gray-100">
-                File Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="file_name"
-                  name="file_name"
-                  type="text"
-                  value={formData.file_name}
-                  onChange={handleChange}
-                  required
-                  autoComplete="username"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
 
-            <Button className="w-full" slot="close" type="submit">
-                Create
-              </Button>
-          </form>
+            {/* Header */}
+            <Modal.Header className="border-b border-gray-800 px-6 py-5">
+              <Modal.Heading className="text-xl font-semibold text-white">
+                Create New File
+              </Modal.Heading>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Add a new file to this project.
+              </p>
+            </Modal.Header>
+
+            {/* Body */}
+            <Modal.Body className="px-6 py-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
+
+                <div>
+                  <label
+                    htmlFor="file_name"
+                    className="mb-2 block text-sm font-medium text-gray-400"
+                  >
+                    File Name
+                  </label>
+
+                  <input
+                    id="file_name"
+                    name="file_name"
+                    type="text"
+                    value={formData.file_name}
+                    onChange={handleChange}
+                    required
+                    placeholder="example.py"
+                    className="
+                      w-full
+                      rounded-xl
+                      border
+                      border-gray-800
+                      bg-[#11161d]
+                      px-4
+                      py-3
+                      text-sm
+                      text-white
+                      outline-none
+                      placeholder:text-gray-600
+                      transition
+                      duration-300
+                      focus:border-blue-500/60
+                      focus:ring-1
+                      focus:ring-blue-500/20
+                    "
+                  />
+                </div>
+
+                <Button
+                  className="
+                    w-full
+                    rounded-xl
+                    bg-linear-to-r
+                    from-blue-600
+                    to-cyan-500
+                    py-3
+                    font-medium
+                    text-white
+                    shadow-lg
+                    shadow-blue-500/20
+                    transition
+                    duration-300
+                    hover:from-blue-500
+                    hover:to-cyan-400
+                  "
+                  slot="close"
+                  type="submit"
+                >
+                  Create File
+                </Button>
+
+              </form>
             </Modal.Body>
-            <Modal.Footer>
-              
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>

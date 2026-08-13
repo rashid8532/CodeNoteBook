@@ -1,118 +1,128 @@
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
 
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from './logo.png'
-import user_logo from './user_logo.png'
-import {Link } from 'react-router-dom'
-import { Create_new_project } from '../../../components/dropdowns/new_project'
-import { Navigate ,useNavigate} from 'react-router-dom'
-import { Delete_project } from '../../../components/dropdowns/delete_project'
-import { useContext, useEffect } from 'react'
-import fileContext from '../../../context/FileContext'
-import getUserData from '../../user/userapi'
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import logo from "./logo.png";
+import user_logo from "./user_logo.png";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import fileContext from "../../../context/FileContext";
+import getUserData from "../../user/userapi";
 
+export default function Navbar({ logout }) {
+  const { user, setuser } = useContext(fileContext);
+  const navigate = useNavigate();
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
-export default function Navbar({onNewproject , logout}) { 
-
-  const {user,setuser} = useContext(fileContext)
-  const navigate = useNavigate()
-  const touser = ()=>{
-    navigate("/user")
-  }
-  useEffect(()=>{
-    getUserData(setuser)
-  })
+  useEffect(() => {
+    getUserData(setuser);
+  }, []);
 
   return (
     <Disclosure
-      as="nav"
-      className="relative bg-black after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 border-2 border-blue-400"
-    >
-      <div className="max-w-7xl h-20">
-        <div className="relative flex h-20 w-screen px-10 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
-            </DisclosureButton>
-          </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start h-20">
-            <div className="flex shrink-0 items-center w-25">
-              <img
-                alt="Your Company"
-                src={logo}
-                className="w-25 h-auto"
-              />
-            </div>
-            <div className=' text-amber-50 w-35 text-xl font-medium items-center flex justify-center'>
-              <h1>CodeNoteBook</h1>
-            </div>
-            <div className="sm:ml-6 sm:block w-250 bg-red-50 flex">
-              <span>Hay <span>{user.FirstName}</span> </span>
-              <Link to={"/"}>Homepage</Link>
-            </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
-            {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 mx-7">
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className='h-10 w-auto'
-                  alt=""
-                  src={user_logo}
-                />
-              </MenuButton>
+    as="nav"
+    className="border-b border-gray-800 bg-[#05070b] text-white">
+      <div className="mx-auto max-w-8xl px-1 pr-2">
+        <div className="flex h-16 items-center justify-between">
 
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+          {/* Logo */}
+          <div className="flex items-center">
+            <img
+              src={logo}
+              alt="CodeNoteBook"
+              className="h-10 w-auto"
+            />
+
+            <div className="ml-3 hidden sm:block">
+              <h1 className="text-lg font-semibold">
+                Code<span className="text-blue-400">Note</span>Book
+              </h1>
+              <p className="text-[10px] uppercase tracking-wider text-gray-600">
+                Coding Workspace
+              </p>
+            </div>
+
+            {/* Navigation */}
+            <div className="ml-8 hidden items-center gap-1 sm:flex">
+              <Link
+                to="/"
+                className="rounded-lg px-3 py-2 text-sm text-gray-400 transition hover:bg-[#11161d] hover:text-blue-400 pl-7"
               >
-                <MenuItem>
-                  <a
-
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
-                    onClick={touser}
-                  >
-                    my profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
-                    onClick={logout}
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
-            </Menu>
+                Home
+              </Link>
+            </div>
           </div>
+
+          {/* Mobile menu */}
+          <DisclosureButton className="absolute left-3 rounded-lg p-2 text-gray-400 hover:bg-[#11161d] hover:text-white sm:hidden">
+            <Bars3Icon className="size-6 group-data-open:hidden" />
+            <XMarkIcon className="hidden size-6 group-data-open:block" />
+          </DisclosureButton>
+
+          {/* User */}
+          <Menu as="div" className="relative">
+            <MenuButton className="group flex items-center gap-2 rounded-xl px-2 py-1.5 transition hover:bg-[#11161d]">
+              <span className="text-sm font-medium text-gray-300 transition group-hover:text-white">
+                {user.FirstName || "User"}
+              </span>
+
+              <img
+                src={user_logo}
+                alt="Profile"
+                className="h-9 w-9 rounded-full border border-gray-800 object-cover transition group-hover:border-blue-500/50"
+              />
+            </MenuButton>
+
+            <MenuItems className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-gray-800 bg-[#0d1117] p-1 shadow-2xl outline-none">
+              <MenuItem>
+                <button
+                  onClick={() => navigate("/user")}
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-400 data-focus:bg-[#11161d] data-focus:text-white"
+                >
+                  My Profile
+                </button>
+              </MenuItem>
+
+              <MenuItem>
+                <button
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-400 data-focus:bg-[#11161d] data-focus:text-white"
+                >
+                  Settings
+                </button>
+              </MenuItem>
+
+              <div className="my-1 border-t border-gray-800" />
+
+              <MenuItem>
+                <button
+                  onClick={logout}
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-500 data-focus:bg-red-500/10 data-focus:text-red-400"
+                >
+                  Sign out
+                </button>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
         </div>
       </div>
 
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          
+      {/* Mobile navigation */}
+      <DisclosurePanel className="border-t border-gray-800 bg-[#0d1117] sm:hidden">
+        <div className="space-y-1 px-4 py-3">
+          <Link
+            to="/"
+            className="block rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-[#11161d] hover:text-blue-400"
+          >
+            Home
+          </Link>
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }

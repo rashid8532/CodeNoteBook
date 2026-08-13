@@ -1,92 +1,155 @@
-import {Button, Modal} from "@heroui/react";
+import { Button, Modal } from "@heroui/react";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate,useSearchParams} from "react-router-dom";
 
 export function Delete_project() {
-    const [formData,setFormData] = useState({
-        project_name:""
-    })
+  const [formData, setFormData] = useState({
+    project_name: "",
+  });
 
-  const token = localStorage.getItem("token")
-  const handleChange = (e) =>{
+  const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name] : e.target.value
-    }))
-  }
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-    const handleSubmit = async (e) =>{
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      try{
-        const token = localStorage.getItem("token")
-        const response = await axios.delete(
-          "http://127.0.0.1:8000/delete_project",
-          {
-            params:{
-                project_name : formData.project_name
-            }, 
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(
+        "http://127.0.0.1:8000/delete_project",
+        {
+          params: {
+            project_name: formData.project_name,
           },
-        )
-        console.log("came out from the try block")
-        alert("Project Deleted Successfuly")
-      }
-      catch (error){
-        if (error.response.status === 409) {
-            alert("This project contains files and cannot be deleted.");
-            return
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-        alert("This Project does not exist")
-        console.error(error)
-      }
-    }
+      );
 
-  
+      alert("Project Deleted Successfully");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        alert("This project contains files and cannot be deleted.");
+        return;
+      }
+
+      alert("This Project does not exist");
+      console.error(error);
+    }
+  };
+
   return (
     <Modal>
-        <div className='flex items-center justify-center '>
-            <Button className={"bg-taupe-900 rounded-xl h-10 text-blue-400 font-bold"}>Delete Project</Button>
-        </div>
+      {/* Delete button */}
+      <div className="px-3 py-3">
+        <Button
+          className="
+            w-full
+            rounded-xl
+            border border-gray-800
+            bg-[#11161d]
+            text-sm
+            font-medium
+            text-gray-400
+            transition
+            duration-300
+            hover:border-red-500/40
+            hover:bg-red-500/10
+            hover:text-red-400
+          "
+        >
+          Delete Project
+        </Button>
+      </div>
 
-      <Modal.Backdrop>
+      <Modal.Backdrop className="bg-black/70 backdrop-blur-sm">
         <Modal.Container>
-            <Modal.Dialog className="sm:max-w-90 bg-black">
+          <Modal.Dialog
+            className="
+              w-full
+              max-w-md
+              rounded-2xl
+              border border-gray-800
+              bg-[#0d1117]
+              shadow-2xl
+            "
+          >
             <Modal.CloseTrigger />
-            <Modal.Header>
-              <Modal.Heading className="text-amber-50">Delete Project </Modal.Heading>
-            </Modal.Header>
-            <Modal.Body>
-               <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label htmlFor="username" className="block text-sm/6 font-medium text-gray-100">
-                Project Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="project_name"
-                  name="project_name"
-                  value={formData.project_name}
-                  onChange={handleChange}
-                  type="text"
-                  required
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
 
-            <Button className="w-full bg-red-700" slot="close" type="submit">
-                Delete
-              </Button>
-          </form>
+            <Modal.Header className="border-b border-gray-800 px-6 py-4">
+              <Modal.Heading className="text-lg font-semibold text-white">
+                Delete Project
+              </Modal.Heading>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Enter the project name to delete it.
+              </p>
+            </Modal.Header>
+
+            <Modal.Body className="px-6 py-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label
+                    htmlFor="project_name"
+                    className="mb-2 block text-sm font-medium text-gray-400"
+                  >
+                    Project Name
+                  </label>
+
+                  <input
+                    id="project_name"
+                    name="project_name"
+                    value={formData.project_name}
+                    onChange={handleChange}
+                    type="text"
+                    required
+                    placeholder="Enter project name"
+                    className="
+                      w-full
+                      rounded-xl
+                      border border-gray-800
+                      bg-[#11161d]
+                      px-4 py-2.5
+                      text-sm text-white
+                      placeholder:text-gray-600
+                      outline-none
+                      transition
+                      duration-300
+                      focus:border-blue-500
+                      focus:ring-1
+                      focus:ring-blue-500/30
+                    "
+                  />
+                </div>
+
+                <Button
+                  className="
+                    w-full
+                    rounded-xl
+                    bg-red-500/10
+                    border border-red-500/20
+                    py-2.5
+                    text-sm
+                    font-medium
+                    text-red-400
+                    transition
+                    duration-300
+                    hover:bg-red-500/20
+                    hover:border-red-500/40
+                  "
+                  slot="close"
+                  type="submit"
+                >
+                  Delete Project
+                </Button>
+              </form>
             </Modal.Body>
-            <Modal.Footer>
-              
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>

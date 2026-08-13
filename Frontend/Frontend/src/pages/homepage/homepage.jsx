@@ -1,147 +1,372 @@
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from './logo.png'
-import {Link} from 'react-router-dom'
-
-const navigation = [
-//   { name: 'Product', href: '#' },
-//   { name: 'Features', href: '#' },
-//   { name: 'Marketplace', href: '#' },
-// //   { name: 'Company', href: '#' },
-]
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import logo from "./logo.png";
+import { Link } from "react-router-dom";
 
 export default function Homepage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="bg-gray-900 ">
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <img
-                alt=""
-                src={logo}
-                className="h-20 w-auto"
-              />
-            </a>
-            <h2 className='text-2xl mt-5 font-medium text-amber-50'> CodeNoteBook</h2>
-          </div>
-          <div className="flex lg:hidden">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200"
-            >
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="size-6" />
-            </button>
-          </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-white">
-                {item.name}
-              </a>
-            ))}
-          </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          </div>
+    <div className="min-h-screen bg-[#05070b] text-white">
+      {/* Navbar */}
+      <header className="absolute inset-x-0 top-0 z-50 border-b border-gray-800/60">
+        <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={logo}
+              alt="CodeNoteBook"
+              className="h-11 w-auto"
+            />
+
+            <div className="hidden sm:block">
+              <p className="text-lg font-semibold">
+                Code<span className="text-blue-400">Note</span>Book
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-gray-600">
+                Coding Workspace
+              </p>
+            </div>
+          </Link>
+
+      
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="
+              rounded-xl
+              border border-gray-800
+              bg-[#11161d]
+              p-2
+              text-gray-400
+              transition
+              hover:border-blue-500/40
+              hover:text-white
+              sm:hidden
+            "
+          >
+            <span className="sr-only">Open menu</span>
+            <Bars3Icon className="h-6 w-6" />
+          </button>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
-          <div className="fixed inset-0 z-50" />
-          <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+
+        {/* Mobile menu */}
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="relative z-50 sm:hidden"
+        >
+          <div className="fixed inset-0 bg-black/60" />
+
+          <DialogPanel
+            className="
+              fixed
+              inset-y-0
+              right-0
+              w-full
+              max-w-sm
+              border-l
+              border-gray-800
+              bg-[#0d1117]
+              p-6
+              shadow-2xl
+            "
+          >
             <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img
-                  alt=""
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                  className="h-8 w-auto"
-                />
-              </a>
+              <div className="flex items-center gap-2">
+                <img src={logo} alt="CodeNoteBook" className="h-9 w-auto" />
+                <span className="font-semibold">
+                  Code<span className="text-blue-400">Note</span>Book
+                </span>
+              </div>
+
               <button
-                type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="-m-2.5 rounded-md p-2.5 text-gray-200"
+                className="
+                  rounded-xl
+                  border border-gray-800
+                  bg-[#11161d]
+                  p-2
+                  text-gray-400
+                  hover:text-white
+                "
               >
-                <span className="sr-only">Close menu</span>
-                <XMarkIcon aria-hidden="true" className="size-6" />
+                <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-white/10">
-                <div className="space-y-2 py-6">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-                <div className="py-6">
-                  <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
-                  >
-                    Log in
-                  </a>
-                </div>
-              </div>
+
+            <div className="mt-10 space-y-3">
+              <Link
+                to="/signin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="
+                  block
+                  rounded-xl
+                  border border-gray-800
+                  bg-[#11161d]
+                  px-4 py-3
+                  text-center
+                  text-sm
+                  font-medium
+                  text-gray-300
+                  hover:border-blue-500/40
+                  hover:text-white
+                "
+              >
+                Sign in
+              </Link>
+
+              <Link
+                to="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="
+                  block
+                  rounded-xl
+                  bg-linear-to-r
+                  from-blue-600
+                  to-cyan-500
+                  px-4 py-3
+                  text-center
+                  text-sm
+                  font-medium
+                  text-white
+                "
+              >
+                Get Started
+              </Link>
             </div>
           </DialogPanel>
         </Dialog>
       </header>
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        >
-          <div
-            style={{
-              clipPath:
-                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-            }}
-            className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"
-          />
-        </div>
-        <div className="mx-auto max-w-2xl py-10 sm:py-10 lg:py-16">
-          <div className="text-center" >
-            <img src={logo} alt="" className= 'w-100 ml-27'/>
-            <h1 className="text-5xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
-              Build, Run and Save Code in One Powerful <span className='text-blue-300'>Note</span><span className='text-blue-500'>Book</span>
-            </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-              Write, run, and manage your code in one place. Create projects, organize your files, choose your programming language, and execute your code instantly. Start building something great today.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              
-              <Link className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" to='/signin'>
-              Sign in</Link>
+      {/* Hero */}
+      <main className="relative isolate overflow-hidden">
+        {/* Background glow */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute left-1/2 -top-60 h-125 w-125 -translate-x-1/2 rounded-full bg-blue-600/10 blur-3xl" />
 
-              <Link className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" to ='/signup'> Sign up</Link>
-              
+          <div className="absolute -left-40 top-1/2 h-100 w-100 rounded-full bg-cyan-500/5 blur-3xl" />
+
+          <div className="absolute -right-40 bottom-0 h-100 w-100 rounded-full bg-blue-600/5 blur-3xl" />
+        </div>
+
+        <div
+          className="
+            mx-auto
+            flex
+            min-h-screen
+            max-w-5xl
+            items-center
+            justify-center
+            px-6
+            pb-16
+            pt-28
+            sm:pt-32
+          "
+        >
+          <div className="w-full text-center">
+
+            {/* Small label */}
+            <div
+              className="
+                mx-auto
+                mb-6
+                inline-flex
+                items-center
+                gap-2
+                rounded-full
+                border
+                border-gray-800
+                bg-[#0d1117]
+                px-4
+                py-2
+                text-xs
+                font-medium
+                text-gray-400
+              "
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50" />
+              Your personal coding workspace
             </div>
+
+            {/* Logo */}
+            <img
+              src={logo}
+              alt="CodeNoteBook"
+              className="
+                mx-auto
+                mb-6
+                h-28
+                w-auto
+                sm:h-36
+              "
+            />
+
+            {/* Heading */}
+            <h1
+              className="
+                mx-auto
+                max-w-4xl
+                text-4xl
+                font-bold
+                tracking-tight
+                text-white
+                sm:text-5xl
+                lg:text-6xl
+              "
+            >
+              Build, Run & Save Code in One
+              <span className="block">
+                Powerful{" "}
+                <span className="text-blue-400">Note</span>
+                <span className="text-cyan-400">Book</span>
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-2xl
+                text-base
+                leading-7
+                text-gray-500
+                sm:text-lg
+              "
+            >
+              Write, run, and manage your code in one place.
+              Create projects, organize files, choose your language,
+              and execute your code instantly.
+            </p>
+
+            {/* Buttons */}
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                to="/signup"
+                className="
+                  w-full
+                  rounded-xl
+                  bg-linear-to-r
+                  from-blue-600
+                  to-cyan-500
+                  px-6
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-white
+                  shadow-lg
+                  shadow-blue-500/20
+                  transition
+                  duration-300
+                  hover:from-blue-500
+                  hover:to-cyan-400
+                  sm:w-auto
+                "
+              >
+                Start Coding
+              </Link>
+
+              <Link
+                to="/signin"
+                className="
+                  w-full
+                  rounded-xl
+                  border
+                  border-gray-800
+                  bg-[#0d1117]
+                  px-6
+                  py-3
+                  text-sm
+                  font-medium
+                  text-gray-300
+                  transition
+                  duration-300
+                  hover:border-blue-500/40
+                  hover:bg-[#11161d]
+                  hover:text-white
+                  sm:w-auto
+                "
+              >
+                Sign in
+              </Link>
+            </div>
+
+            {/* Feature cards */}
+            <div className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-gray-800
+                  bg-[#0d1117]
+                  p-5
+                  text-left
+                  transition
+                  duration-300
+                  hover:border-blue-500/30
+                "
+              >
+                <p className="text-sm font-medium text-white">
+                  Projects
+                </p>
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  Organize your code into dedicated projects.
+                </p>
+              </div>
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-gray-800
+                  bg-[#0d1117]
+                  p-5
+                  text-left
+                  transition
+                  duration-300
+                  hover:border-blue-500/30
+                "
+              >
+                <p className="text-sm font-medium text-white">
+                  Multi-language
+                </p>
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  Write and execute code in multiple languages.
+                </p>
+              </div>
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-gray-800
+                  bg-[#0d1117]
+                  p-5
+                  text-left
+                  transition
+                  duration-300
+                  hover:border-cyan-500/30
+                "
+              >
+                <p className="text-sm font-medium text-white">
+                  Code Editor
+                </p>
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  A focused workspace for writing and managing code.
+                </p>
+              </div>
+
+            </div>
+
           </div>
         </div>
-        {/* <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-        >
-          <div
-            style={{
-              clipPath:
-                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-            }}
-            className="relative left-[calc(50%+3rem)] aspect-1155/678 w-144.5 -translate-x-1/2 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-288.75"
-          />
-        </div> */}
-      </div>
+      </main>
     </div>
-  )
+  );
 }

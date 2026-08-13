@@ -18,7 +18,7 @@ def get_all_projects(
     projects = db.query(Project).filter(Project.user_id == current_user.id,).all()
 
     if len(projects) == 0:
-        raise HTTPException(status_code=404,detail="Here is no project on this user id")
+        return []
     return(projects)
 
 @router.get("/get_project",response_model=list[projectResponse])

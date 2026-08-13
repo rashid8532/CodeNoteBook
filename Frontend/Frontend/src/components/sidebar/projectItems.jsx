@@ -4,118 +4,77 @@ import { Create_new_file } from "../dropdowns/new_file";
 import FileItem from "./fileItems";
 import fileContext from "../../context/FileContext";
 
-export default function ProjectItem({
-    project,
-    selectedFile,
-}) {
-    const {setSelectedFile,setFileName} = useContext(fileContext)
+export default function ProjectItem({ project, selectedFile }) {
+  const { setSelectedFile, setFileName } = useContext(fileContext);
+  const [open, setOpen] = useState(false);
+  const [files, setFiles] = useState([]);
 
-    const [open, setOpen] = useState(false);
+  const toggleProject = async () => {
+    if (open) {
+      setOpen(false);
+      return;
+    }
 
-    const [files, setFiles] = useState([]);
+    try {
+      const token = localStorage.getItem("token");
 
-
-    const toggleProject = async () => {
-
-        // If project is already open,
-        // simply close it.
-        if (open) {
-
-            setOpen(false);
-
-            return;
+      const response = await axios.get(
+        `http://127.0.0.1:8000/get_files?project_id=${project.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
 
+      setFiles(response.data);
+      setOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-        try {
+  return (
+    <div>
+      {/* Project */}
+      <div className="flex items-center rounded-lg hover:bg-[#11161d]">
 
-            const token = localStorage.getItem("token");
+        <button
+          onClick={toggleProject}
+          className="flex flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-300 transition hover:text-white"
+        >
+          <span className="w-3 text-xs text-gray-500">
+            {open ? "▼" : "▶"}
+          </span>
 
-            const response = await axios.get(
-                `http://127.0.0.1:8000/get_files?project_id=${project.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+          <span className="text-blue-400">📁</span>
 
+          <span className="truncate font-medium">
+            {project.project_name}
+          </span>
+        </button>
 
-            setFiles(response.data);
-
-            setOpen(true);
-
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-    };
-
-
-    return (
-        <div>
-
-            {/* Project Header */}
-            <div className="w-full flex">
-
-
-                {/* Project button */}
-                <button
-                    onClick={toggleProject}
-                    className="w-full flex items-center gap-2 px-4 py-2 hover:bg-[#2d2d2d] transition"
-                >
-
-                    <span className="text-xs">
-                        {open ? "▼" : "▶"}
-                    </span>
-
-                    <span>
-                        📁
-                    </span>
-
-                    <span className="font-medium">
-                        {project.project_name}
-                    </span>
-                </button>
-
-
-                {/* Create new file */}
-                <div className="flex justify-center items-center hover:bg-[#2d2d2d] transition h-15 w-20">
-
-                    <Create_new_file
-                        projectId={project.id}
-                    />
-
-                </div>
-
-            </div>
-
-
-            {/* Files */}
-            {open && (
-
-                <div className="ml-8">
-
-                    {files.map((file) => (
-
-                        <FileItem
-                            key={file.id}
-                            file={file}
-                            project_name={project.project_name}
-                            projectId={project.id}
-                            selectedFile={selectedFile}
-                            setSelectedFile={setSelectedFile}
-                            setFileName = {setFileName}
-                        />
-
-                    ))}
-
-                </div>
-
-            )}
-
+        <div className="px-2">
+          <Create_new_file projectId={project.id} />
         </div>
-    );
+      </div>
+
+      {/* Files */}
+      {open && (
+        <div className="ml-5 border-l border-gray-800 pl-2">
+          {files.map((file) => (
+            <FileItem
+              key={file.id}
+              file={file}
+              project_name={project.project_name}
+              projectId={project.id}
+              selectedFile={selectedFile}
+              setSelectedFile={setSelectedFile}
+              setFileName={setFileName}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }

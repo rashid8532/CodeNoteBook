@@ -1,116 +1,204 @@
-import {Button, Modal} from "@heroui/react";
+import { Button, Modal } from "@heroui/react";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate,useSearchParams} from "react-router-dom";
 
 export function Create_new_project() {
+  const [formData, setFormData] = useState({
+    project_name: "",
+    description: "",
+  });
 
-  const token = localStorage.getItem("token")
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-    const [formData,setFormData] = useState(
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/new_project",
+        formData,
         {
-            project_name : "",
-            description : ""
-        }
-    )
-
-    const handleChange = (e) =>{
-        setFormData((prve) =>({
-            ...prve,
-            [e.target.name] : e.target.value
-        }))
-    }
-
-    const handleSubmit = async (e) =>{
-      e.preventDefault();
-
-      try{
-        const token = localStorage.getItem("token")
-        const response = await axios.post(
-          "http://127.0.0.1:8000/new_project",
-          formData,
-          {
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        )
-        console.log(response.formData)
-        alert("Project Created Successfuly")
-      }
-      catch (error){
-        alert("something went wrong this cant be save")
-        console.error(error)
-      }
+        }
+      );
+
+      console.log(response.formData);
+      alert("Project Created Successfuly");
+    } catch (error) {
+      alert("something went wrong this cant be save");
+      console.error(error);
     }
+  };
 
   return (
     <Modal>
-        <div className='flex items-center justify-center h-20 w-32'>
-            <Button className={"bg-taupe-900 rounded-xl h-10 text-white font-medium"}>Add New Projects</Button>
-        </div>
+      {/* Trigger */}
+      <div className="flex items-center">
+        <Button
+          className="
+            rounded-xl
+            border border-gray-800
+            bg-[#11161d]
+            px-4
+            py-2
+            text-sm
+            font-medium
+            text-gray-300
+            transition
+            duration-300
+            hover:border-blue-500/40
+            hover:bg-[#151b23]
+            hover:text-white
+          "
+        >
+          + New Project
+        </Button>
+      </div>
 
-      <Modal.Backdrop>
+      <Modal.Backdrop className="bg-black/70 backdrop-blur-sm">
         <Modal.Container>
-            <Modal.Dialog className="sm:max-w-90 bg-black">
+          <Modal.Dialog
+            className="
+              w-full
+              max-w-md
+              rounded-3xl
+              border
+              border-gray-800
+              bg-[#0d1117]
+              text-white
+              shadow-2xl
+              shadow-black/50
+            "
+          >
             <Modal.CloseTrigger />
-            <Modal.Header>
-              <Modal.Heading className="text-amber-50">Create New Project</Modal.Heading>
+
+            {/* Header */}
+            <Modal.Header className="border-b border-gray-800 px-6 py-5">
+              <Modal.Heading className="text-xl font-semibold text-white">
+                Create New Project
+              </Modal.Heading>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Create a new workspace for your code.
+              </p>
             </Modal.Header>
-            <Modal.Body>
-               <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label htmlFor="project_name" className="block text-sm/6 font-medium text-gray-100">
-                Project Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="project_name"
-                  name="project_name"
-                  type="text"
-                  value={formData.project_name}
-                  onChange={handleChange}
-                  required
-                  autoComplete="username"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
 
-            
+            {/* Form */}
+            <Modal.Body className="px-6 py-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="description" className="block text-sm/6 font-medium text-gray-100">
-                  Description
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="description"
-                  name="description"
-                  type="text"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+                {/* Project Name */}
+                <div>
+                  <label
+                    htmlFor="project_name"
+                    className="mb-2 block text-sm font-medium text-gray-400"
+                  >
+                    Project Name
+                  </label>
 
-            <div>
-            </div>
+                  <input
+                    id="project_name"
+                    name="project_name"
+                    type="text"
+                    value={formData.project_name}
+                    onChange={handleChange}
+                    required
+                    placeholder="My awesome project"
+                    className="
+                      w-full
+                      rounded-xl
+                      border
+                      border-gray-800
+                      bg-[#11161d]
+                      px-4
+                      py-3
+                      text-sm
+                      text-white
+                      outline-none
+                      placeholder:text-gray-600
+                      transition
+                      duration-300
+                      focus:border-blue-500/60
+                      focus:ring-1
+                      focus:ring-blue-500/20
+                    "
+                  />
+                </div>
 
-            <Button className="w-full" slot="close" type="submit">
-                Create
-              </Button>
-          </form>
+                {/* Description */}
+                <div>
+                  <label
+                    htmlFor="description"
+                    className="mb-2 block text-sm font-medium text-gray-400"
+                  >
+                    Description
+                  </label>
+
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    placeholder="What is this project about?"
+                    className="
+                      w-full
+                      resize-none
+                      rounded-xl
+                      border
+                      border-gray-800
+                      bg-[#11161d]
+                      px-4
+                      py-3
+                      text-sm
+                      text-white
+                      outline-none
+                      placeholder:text-gray-600
+                      transition
+                      duration-300
+                      focus:border-blue-500/60
+                      focus:ring-1
+                      focus:ring-blue-500/20
+                    "
+                  />
+                </div>
+
+                {/* Create */}
+                <Button
+                  className="
+                    w-full
+                    rounded-xl
+                    bg-linear-to-r
+                    from-blue-600
+                    to-cyan-500
+                    py-3
+                    font-medium
+                    text-white
+                    shadow-lg
+                    shadow-blue-500/20
+                    transition
+                    duration-300
+                    hover:from-blue-500
+                    hover:to-cyan-400
+                  "
+                  slot="close"
+                  type="submit"
+                >
+                  Create Project
+                </Button>
+
+              </form>
             </Modal.Body>
-            <Modal.Footer>
-              
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
