@@ -1,12 +1,15 @@
 import { Button, Modal } from "@heroui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import fileContext from "../../context/FileContext";
+import { FetchProjects } from "../sidebar/fetchproject";
 
 export function Create_new_project() {
   const [formData, setFormData] = useState({
     project_name: "",
     description: "",
   });
+  const{setProjects} = useContext(fileContext)
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -30,8 +33,7 @@ export function Create_new_project() {
           },
         }
       );
-
-      console.log(response.formData);
+      FetchProjects(setProjects)
       alert("Project Created Successfuly");
     } catch (error) {
       alert("something went wrong this cant be save");
@@ -148,7 +150,6 @@ export function Create_new_project() {
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    required
                     rows="3"
                     placeholder="What is this project about?"
                     className="

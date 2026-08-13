@@ -1,14 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Create_new_file } from "../dropdowns/new_file";
 import FileItem from "./fileItems";
 import fileContext from "../../context/FileContext";
 
 export default function ProjectItem({ project, selectedFile }) {
-  const { setSelectedFile, setFileName } = useContext(fileContext);
+  const { setSelectedFile, setFileName ,setProjects } = useContext(fileContext);
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
-
   const toggleProject = async () => {
     if (open) {
       setOpen(false);

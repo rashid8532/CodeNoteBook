@@ -33,6 +33,9 @@ export default function Signup() {
       alert("Signup Successful");
       navigate("/signin");
     } catch (error) {
+      if(error.response?.status === 409){
+        alert("write down the Valid email")
+      }
       console.log(error.response?.data);
       console.error(error);
     }

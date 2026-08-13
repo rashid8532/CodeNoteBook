@@ -9,10 +9,6 @@ const API = axios.create({
 export const executeCode = async (language, sourceCode) => {
     const languageId = LANGUAGE_IDS[language]
 
-
-    console.log("Language:", language);
-    console.log("language_id:", LANGUAGE_IDS[language]);
-
     const response = await API.post("/submissions", {
         language_id: languageId,
         source_code: sourceCode
@@ -23,7 +19,6 @@ export const executeCode = async (language, sourceCode) => {
     while(true){
     const Result =  await API.get(`/submissions/${token}`)
 
-    console.log("status",Result.data.status.id)
 
         if(Result.data.status.id > 2){
             return Result.data

@@ -4,32 +4,13 @@ import ProjectItem from "./projectItems";
 import { Create_new_project } from "../dropdowns/new_project";
 import fileContext from "../../context/FileContext";
 import { Delete_project } from "../dropdowns/delete_project";
+import { FetchProjects } from "./fetchproject";
 
 export default function Sidebar() {
-  const { projects, setProjects, selectedFile, setSelectedFile } =
-    useContext(fileContext);
+const { projects, setProjects, selectedFile, setSelectedFile } = useContext(fileContext);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await axios.get(
-          "http://127.0.0.1:8000/get_projects",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setProjects(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProjects();
+    FetchProjects(setProjects);
   }, []);
 
   return (

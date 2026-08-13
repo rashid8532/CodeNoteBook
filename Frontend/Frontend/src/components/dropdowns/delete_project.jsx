@@ -1,12 +1,15 @@
 import { Button, Modal } from "@heroui/react";
-import { useState } from "react";
+import { useState,useContext } from "react";
 import axios from "axios";
+import { FetchProjects } from "../sidebar/fetchproject";
+import fileContext from "../../context/FileContext";
+
 
 export function Delete_project() {
   const [formData, setFormData] = useState({
     project_name: "",
   });
-
+  const {setProjects} = useContext(fileContext)
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -31,17 +34,18 @@ export function Delete_project() {
           },
         }
       );
-
+      FetchProjects(setProjects)
       alert("Project Deleted Successfully");
     } catch (error) {
       if (error.response?.status === 409) {
         alert("This project contains files and cannot be deleted.");
         return;
       }
-
       alert("This Project does not exist");
       console.error(error);
     }
+
+
   };
 
   return (

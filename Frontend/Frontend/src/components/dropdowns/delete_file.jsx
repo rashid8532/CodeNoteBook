@@ -1,7 +1,11 @@
 import { Button, Modal } from "@heroui/react";
 import axios from "axios";
+import { use, useContext } from "react";
+import fileContext from "../../context/FileContext";
+import { FetchProjects } from "../sidebar/fetchproject";
 
 export function Delete_file({ FileName }) {
+  const {setProjects} = useContext(fileContext)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,6 +23,7 @@ export function Delete_file({ FileName }) {
           },
         }
       );
+      FetchProjects(setProjects)
 
       alert("File deleted successfully");
     } catch (error) {

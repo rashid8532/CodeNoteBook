@@ -24,12 +24,6 @@ export default function Editor(){
     // this state is use prop drilling now
     const editorRef = useRef(null);
     const [selectedLanguage,setSelectedLanguage] = useState("javascript")
-
-
-
-
-
-
     useEffect(() =>{
         const fetchdata = async () =>{
             const token = localStorage.getItem("token")

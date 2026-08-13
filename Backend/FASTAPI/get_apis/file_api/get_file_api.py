@@ -33,10 +33,7 @@ def get_files(
     ).all()
 
     if not files :
-         raise HTTPException(
-              status_code=404,
-              detail= "no file found in this folder"
-         )
+         return []
 
     return files
 

@@ -32,6 +32,12 @@ def signup(user:UserCreate,db:Session = Depends(get_db)):
             status_code= 400,
             detail= "username already registered"
             )
+    email = user.email[-9:]
+    if email != "gmail.com":
+        raise HTTPException(
+            status_code=409,
+            detail="email is not correct"
+        )
     new_user = User(
         first_name = user.first_name,
         last_name = user.last_name,
