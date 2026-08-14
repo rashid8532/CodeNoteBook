@@ -8,6 +8,7 @@ function EditorBar({
   FileName,
   selectedLanguage,
   setSelectedLanguage,
+  editorRef
 }) {
   const [showAI, setShowAI] = useState(false);
 
@@ -36,7 +37,7 @@ function EditorBar({
         </div>
 
         {/* Right side */}
-        <div className="flex items-center w-70 gap-8">
+        <div className="flex items-center w-60 gap-8">
 
           {/* File */}
           <div className="flex max-w-[60%] items-center gap-2 rounded-lg border border-gray-800 bg-[#11161d] px-3 py-2">
@@ -47,7 +48,6 @@ function EditorBar({
             </span>
           </div>
 
-          AI
           <button
             onClick={() => setShowAI(!showAI)}
             className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition ${
@@ -65,7 +65,7 @@ function EditorBar({
 
       {/* AI Panel */}
       {showAI && (
-        <AIPanel selectedLanguage={selectedLanguage} />
+        <AIPanel selectedLanguage={selectedLanguage} editorRef={editorRef}/>
       )}
     </>
   );

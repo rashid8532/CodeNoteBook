@@ -67,7 +67,7 @@ export default function Navbar({ logout }) {
 
           {/* User */}
           <Menu as="div" className="relative">
-            <MenuButton className="group flex items-center gap-2 rounded-xl px-2 py-1.5 transition hover:bg-[#11161d]">
+            <MenuButton className="group flex items-center gap-2 rounded-xl px-2 py-1.5 transition hover:bg-[#11161d] ">
               <span className="text-sm font-medium text-gray-300 transition group-hover:text-white">
                 {user.FirstName || "User"}
               </span>

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
 import EditorBar from "./editorbar";
+import fileContext from "../../context/FileContext";
 
 function EditorArea({
   FileName,
@@ -9,7 +10,7 @@ function EditorArea({
   selectedLanguage,
   setSelectedLanguage,
 }) {
-  const [content, setcontent] = useState("");
+  const {content, setcontent} = useContext(fileContext)
 
   const getFileContent = async (FileName) => {
     const token = localStorage.getItem("token");
@@ -74,6 +75,7 @@ function EditorArea({
         FileName={FileName}
         selectedLanguage={selectedLanguage}
         setSelectedLanguage={setSelectedLanguage}
+        editorRef={editorRef}
       />
 
       <div className="overflow-hidden">

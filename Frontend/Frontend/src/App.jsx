@@ -60,6 +60,7 @@ function App() {
           LastName: "",
           Email: ""
       })
+  const [content, setcontent] = useState("");
 
   return (
     <>
@@ -76,7 +77,10 @@ function App() {
           setProjects,
 
           user,
-          setuser
+          setuser,
+
+          content,
+          setcontent
         }
       }
     >
