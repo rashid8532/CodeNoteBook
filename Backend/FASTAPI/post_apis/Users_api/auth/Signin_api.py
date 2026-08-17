@@ -104,7 +104,7 @@ def verify_token(token:str = Depends(Oauth2_schemes),db:Session =Depends(get_db)
         return username
     except  JWTError:
             raise HTTPException(
-                status_code= 401,
+                status_code= 400,
                 detail="Invalid token"
             )
 

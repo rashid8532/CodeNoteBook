@@ -61,6 +61,10 @@ function App() {
           Email: ""
       })
   const [content, setcontent] = useState("");
+  const [files, setFiles] = useState([]);
+  const [open, setOpen] = useState(false);
+
+
 
   return (
     <>
@@ -80,7 +84,13 @@ function App() {
           setuser,
 
           content,
-          setcontent
+          setcontent,
+
+          files,
+          setFiles,
+
+          open,
+          setOpen
         }
       }
     >

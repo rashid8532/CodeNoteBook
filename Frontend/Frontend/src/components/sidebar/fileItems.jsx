@@ -7,6 +7,8 @@ export default function FileItem({
   selectedFile,
   setSelectedFile,
   setFileName,
+  project,
+  refreshFiles
 }) {
   return (
     <div className="flex items-center">
@@ -36,6 +38,8 @@ export default function FileItem({
         <Delete_file
           FileName={file.file_name}
           projectId={projectId}
+          project={project}
+          refreshFiles={refreshFiles}
         />
       </div>
 

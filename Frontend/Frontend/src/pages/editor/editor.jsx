@@ -10,6 +10,8 @@ import Output from "../../components/console/outputArea";
 
 
 export default function Editor(){
+    const navigate = useNavigate()
+
     // this const variables are for fileContexts 
     const {
         FileName,
@@ -25,7 +27,10 @@ export default function Editor(){
     const editorRef = useRef(null);
     const [selectedLanguage,setSelectedLanguage] = useState("javascript")
     useEffect(() =>{
+
+
         const fetchdata = async () =>{
+            try{
             const token = localStorage.getItem("token")
 
             const response = await axios.get(
@@ -36,14 +41,18 @@ export default function Editor(){
                         Authorization:`Bearer ${token}`
                     }
                 },
-            )
+            )}
+            catch{
+                alert("token expired")
+                navigate("/signin")
+            }
             }
 
-        fetchdata()
+            fetchdata()
+        
     },[])
 
 
-    const navigate = useNavigate()
 
     const logout = ()=>{
         localStorage.removeItem("token")

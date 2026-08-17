@@ -2,7 +2,12 @@ import { Button, Modal } from "@heroui/react";
 import { useState } from "react";
 import axios from "axios";
 
-export function Create_new_file({ projectId }) {
+export function Create_new_file({
+  projectId,
+  project,
+  refreshFiles,
+}) {
+
   const [formData, setFormData] = useState({
     file_name: "",
     project_id: projectId,
@@ -21,7 +26,7 @@ export function Create_new_file({ projectId }) {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.post(
+      await axios.post(
         "http://127.0.0.1:8000/create_file",
         formData,
         {
@@ -31,15 +36,28 @@ export function Create_new_file({ projectId }) {
         }
       );
 
-      alert(`file ${formData.file_name} Created Successfuly`);
+      alert(`File ${formData.file_name} created successfully`);
+
+      // Refresh ONLY this project's files
+      await refreshFiles();
+
+      // Clear input
+      setFormData({
+        file_name: "",
+        project_id: projectId,
+      });
+
     } catch (error) {
-      alert("something went wrong this cant be save");
+
+      alert("Something went wrong. This file can't be saved.");
+
       console.error(error);
     }
   };
 
   return (
     <Modal>
+
       {/* Trigger */}
       <Button
         className="
@@ -64,7 +82,9 @@ export function Create_new_file({ projectId }) {
       </Button>
 
       <Modal.Backdrop className="bg-black/70 backdrop-blur-sm">
+
         <Modal.Container>
+
           <Modal.Dialog
             className="
               w-full
@@ -78,10 +98,12 @@ export function Create_new_file({ projectId }) {
               shadow-black/50
             "
           >
+
             <Modal.CloseTrigger />
 
             {/* Header */}
             <Modal.Header className="border-b border-gray-800 px-6 py-5">
+
               <Modal.Heading className="text-xl font-semibold text-white">
                 Create New File
               </Modal.Heading>
@@ -89,13 +111,19 @@ export function Create_new_file({ projectId }) {
               <p className="mt-1 text-sm text-gray-500">
                 Add a new file to this project.
               </p>
+
             </Modal.Header>
 
             {/* Body */}
             <Modal.Body className="px-6 py-6">
-              <form onSubmit={handleSubmit} className="space-y-5">
+
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
 
                 <div>
+
                   <label
                     htmlFor="file_name"
                     className="mb-2 block text-sm font-medium text-gray-400"
@@ -130,6 +158,7 @@ export function Create_new_file({ projectId }) {
                       focus:ring-blue-500/20
                     "
                   />
+
                 </div>
 
                 <Button
@@ -156,10 +185,15 @@ export function Create_new_file({ projectId }) {
                 </Button>
 
               </form>
+
             </Modal.Body>
+
           </Modal.Dialog>
+
         </Modal.Container>
+
       </Modal.Backdrop>
+
     </Modal>
   );
 }

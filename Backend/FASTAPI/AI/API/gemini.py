@@ -14,7 +14,9 @@ client = genai.Client(
 
 # for event in stream:
 #     print(event.text, end="")
-
+action ="Fix"
+language = "java"
+codeContent = "public"
 def get_Response(action, language, codeContent, prompt):
 
     if action == "Fix":
@@ -143,3 +145,5 @@ CODE TO CONVERT:
     )
 
     return response.text
+
+# get_Response(action ,language,codeContent,prompt="this")
