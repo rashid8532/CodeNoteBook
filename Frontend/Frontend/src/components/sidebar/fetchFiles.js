@@ -1,5 +1,5 @@
 
-export const Fetchfiles = async () => {
+export const Fetchfiles = async (project,setFiles) => {
     try {
       const token = localStorage.getItem("token");
 

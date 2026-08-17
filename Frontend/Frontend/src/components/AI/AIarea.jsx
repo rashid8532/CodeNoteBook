@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import fileContext from "../../context/FileContext";
+import axios from "axios";
 
 export default function AIPanel({ selectedLanguage, editorRef }) {
     const [prompt, setPrompt] = useState("");
@@ -27,57 +28,74 @@ export default function AIPanel({ selectedLanguage, editorRef }) {
 
         setLoading(true);
 
-        console.log({
-            action,
+        const givendata = {
+            action: action,
             language: selectedLanguage,
-            code: currentCode
-        });
+            code: currentCode,
+            prompt: prompt
+        };
 
-        // Gemini API will come here later
-
-        setTimeout(() => {
-            setResponse(
-                `// AI ${action} suggestion
-
-console.log("Improved code");`
+        try {
+            const result = await axios.post(
+                "http://127.0.0.1:8000/ai",
+                givendata
             );
 
+            setResponse(result.data.response);
             setShowResponse(true);
+
+        } catch (error) {
+            console.error("AI request error:", error);
+            alert("AI request failed.");
+
+        } finally {
             setLoading(false);
-        }, 1000);
+        }
     };
 
     const handleGenerate = async () => {
-        if (!prompt.trim()) return;
+        if (!prompt.trim()) {
+            return;
+        }
 
         setLoading(true);
 
-        console.log({
-            prompt,
-            language: selectedLanguage
-        });
+        const currentCode = getCurrentCode();
 
-        // Gemini API will come here later
+        const givendata = {
+            action: "Ask",
+            language: selectedLanguage,
+            code: currentCode,
+            prompt: prompt
+        };
 
-        setTimeout(() => {
-            setResponse(
-                `// Generated code
-
-console.log("Generated from your prompt");`
+        try {
+            const result = await axios.post(
+                "http://127.0.0.1:8000/ai",
+                givendata
             );
 
+            setResponse(result.data.response);
             setShowResponse(true);
+
+        } catch (error) {
+            console.error("AI request error:", error);
+            alert("AI request failed.");
+
+        } finally {
             setLoading(false);
-        }, 1000);
+        }
     };
 
     const keepChanges = () => {
-        if (!editorRef?.current) return;
+        if (!editorRef?.current) {
+            return;
+        }
 
         // Update React state
         setcontent(response);
 
-        // Update Monaco immediately
+        // Update Monaco Editor
         editorRef.current.setValue(response);
 
         setResponse("");
@@ -118,6 +136,7 @@ console.log("Generated from your prompt");`
                         {/* Actions */}
                         <div className="space-y-2 p-4">
 
+                            {/* Fix */}
                             <button
                                 disabled={loading}
                                 onClick={() => handleAIAction("Fix")}
@@ -132,6 +151,7 @@ console.log("Generated from your prompt");`
                                 </p>
                             </button>
 
+                            {/* Optimize */}
                             <button
                                 disabled={loading}
                                 onClick={() => handleAIAction("Optimize")}
@@ -146,6 +166,7 @@ console.log("Generated from your prompt");`
                                 </p>
                             </button>
 
+                            {/* Convert */}
                             <button
                                 disabled={loading}
                                 onClick={() =>

@@ -8,6 +8,7 @@ export default function ProjectItem({ project, selectedFile }) {
   const { setSelectedFile, setFileName ,setProjects } = useContext(fileContext);
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState([]);
+
   const toggleProject = async () => {
     if (open) {
       setOpen(false);
@@ -24,7 +25,7 @@ export default function ProjectItem({ project, selectedFile }) {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
+      ); 
 
       setFiles(response.data);
       setOpen(true);
