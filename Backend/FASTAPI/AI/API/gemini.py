@@ -143,6 +143,7 @@ CODE TO CONVERT:
         model="gemini-3.6-flash",
         contents=final_prompt
     )
+    print("GEMINI REQUEST SENT")
 
     return response.text
 

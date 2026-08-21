@@ -7,10 +7,15 @@ from passlib.context import CryptContext
 from jose import jwt,JWTError
 from datetime import datetime,timedelta,timezone
 from DATABASE.Tables.users_table import User
-from FASTAPI.my_seceret_key import SECRET_KEY,ALGORITHM,TOKEN_EXPIRY_MIN
 from DATABASE.database import get_db
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+TOKEN_EXPIRY_MIN = int(os.getenv("TOKEN_EXPIRY_MIN"))
 
 router = APIRouter()
 
@@ -85,9 +90,9 @@ def get_current_user(token:str = Depends(Oauth2_schemes),db:Session =Depends(get
     except JWTError:
             raise HTTPException(
                 status_code= 401,
-                detail="Invalid token"
-            )
-
+                detail="Invalid token"  
+            )   
+    
 
 def verify_token(token:str = Depends(Oauth2_schemes),db:Session =Depends(get_db)):
     try :
