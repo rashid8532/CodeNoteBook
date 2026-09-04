@@ -13,6 +13,7 @@ from FASTAPI.update_api.file_api.update_file_content import router as update_fil
 from FASTAPI.delete_api.delete_file_api import router as delete_file_router
 from FASTAPI.get_apis.user_api.get_user import router as user_data_router
 from FASTAPI.AI.API.AI_post_api import router as ai_router
+from FASTAPI.middleware.authMiddleware import authenticationMiddleware
 
 
 app = FastAPI()
@@ -22,6 +23,8 @@ origins =[
     "http://localhost:5173",
     "http://127.0.0.1:5173"
           ]
+
+app.middleware("http")(authenticationMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
