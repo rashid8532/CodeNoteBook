@@ -11,7 +11,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from "./logo.png";
 import user_logo from "./user_logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import fileContext from "../../../context/FileContext";
 import getUserData from "../../user/userapi";
@@ -19,6 +19,8 @@ import getUserData from "../../user/userapi";
 export default function Navbar({ logout }) {
   const { user, setuser } = useContext(fileContext);
   const navigate = useNavigate();
+  const {username} = useParams()
+
 
   useEffect(() => {
     getUserData(setuser);
@@ -82,7 +84,7 @@ export default function Navbar({ logout }) {
             <MenuItems className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-gray-800 bg-[#0d1117] p-1 shadow-2xl outline-none">
               <MenuItem>
                 <button
-                  onClick={() => navigate("/user")}
+                  onClick={() => navigate(`/user/${username}`)}
                   className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-400 data-focus:bg-[#11161d] data-focus:text-white"
                 >
                   My Profile

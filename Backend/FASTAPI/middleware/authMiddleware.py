@@ -10,7 +10,7 @@ ALGORITHM = os.getenv("ALGORITHM")
 
 
 async def authenticationMiddleware(request:Request,call_next):
-    if request.url.path in ["/signin", "/signup", "/docs", "/openapi.json", "/redoc"]:
+    if request.url.path in ["/","/signin", "/signup", "/docs", "/openapi.json", "/redoc"]:
         return await call_next(request)
 
     authorization = request.headers.get("Authorization")

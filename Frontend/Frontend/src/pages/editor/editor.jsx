@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState,useRef, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import {Create_new_project} from "../../components/dropdowns/new_project";
 import Sidebar from "../../components/sidebar/sidebar";
@@ -10,6 +10,8 @@ import Output from "../../components/console/outputArea";
 
 
 export default function Editor(){
+    const { username, projectName } = useParams();
+
     const navigate = useNavigate()
 
     // this const variables are for fileContexts 

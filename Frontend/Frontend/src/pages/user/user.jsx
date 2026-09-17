@@ -2,9 +2,11 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import fileContext from '../../context/FileContext'
 import getUserData from './userapi'
+import { useNavigate, useParams } from 'react-router-dom'
 
 function User() {
     const token = localStorage.getItem("token")
+
 
     const {user,setuser} = useContext(fileContext)
 

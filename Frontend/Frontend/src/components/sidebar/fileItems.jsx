@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from "react-router-dom";
 import { Delete_file } from "../dropdowns/delete_file";
 
 export default function FileItem({
@@ -9,7 +10,11 @@ export default function FileItem({
   setFileName,
   project,
   refreshFiles
-}) {
+}
+) {
+
+     const navigate = useNavigate()
+     const {username,projectName} = useParams()
   return (
     <div className="flex items-center">
 
@@ -18,6 +23,7 @@ export default function FileItem({
         onClick={() => {
           setSelectedFile(file.id);
           setFileName(file.file_name);
+          navigate(`/editor/${username}/${projectName}/${file.file_name}`)
         }}
         className={`flex flex-1 items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition
           ${

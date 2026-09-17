@@ -3,8 +3,11 @@ import axios from "axios";
 import { Create_new_file } from "../dropdowns/new_file";
 import FileItem from "./fileItems";
 import fileContext from "../../context/FileContext";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProjectItem({ project, selectedFile }) {
+  const navigate = useNavigate()
+  const {username} = useParams()
   const {
     setSelectedFile,
     setFileName,
@@ -38,10 +41,12 @@ export default function ProjectItem({ project, selectedFile }) {
   const toggleProject = async () => {
     if (open) {
       setOpen(false);
+      navigate(`/editor/${username}`)
       return;
     }
 
     await fetchProjectFiles();
+    navigate(`/editor/${username}/${project.project_name}`)
   };
 
   return (

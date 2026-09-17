@@ -27,13 +27,37 @@ const router = createBrowserRouter(
     {path: "/signin",
       element : <Signin/>
     },
-    {path: "/editor",
+    // {path: "/editor",
+    //   element : (
+    //     <ProtectedRoute>
+    //       <Editor/>
+    //     </ProtectedRoute>
+    //   )
+    // },
+       {path: "/editor/:username",
       element : (
         <ProtectedRoute>
           <Editor/>
         </ProtectedRoute>
       )
     },
+
+    {path: "/editor/:username/:projectName",
+      element : (
+        <ProtectedRoute>
+          <Editor/>
+        </ProtectedRoute>
+      )
+    },
+    {path: "/editor/:username/:projectName/:fileName",
+      element : (
+        <ProtectedRoute>
+          <Editor/>
+        </ProtectedRoute>
+      )
+    },
+
+
     {
       path:"/user",
       element:(
@@ -42,6 +66,16 @@ const router = createBrowserRouter(
         </ProtectedRoute>
       )
     },
+
+        {
+      path:"/user/:username",
+      element:(
+        <ProtectedRoute>
+          <User/>
+        </ProtectedRoute>
+      )
+    },
+
     {
       path:"/ai",
       element:(

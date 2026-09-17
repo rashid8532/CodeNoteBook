@@ -39,7 +39,7 @@ export default function Signin() {
 
       alert("Signin Successful");
 
-      navigate("/editor");
+      navigate(`/editor/${formData.username}`);
     } catch (error) {
       alert("something is wrong check username or password");
 
